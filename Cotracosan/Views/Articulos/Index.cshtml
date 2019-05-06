@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Index";
+    ViewBag.modalTitle = "Articulos";
+}
+
+<h2>Lista de Articulos</h2>
+
+<p>
+    <button class="btn btn-success" onclick="getHtmlData('/Articulos/Create/')" type="button" data-toggle="modal" data-target="#modal-default"> Nuevo Articulo</button>
+</p>
+
+<div class="col-md-12">
+    <div class="table-responsive">
+        <table class="table" id="tableArticulos">
+            <thead>
+                <tr>
+                    <th>
+                        Codigo Articulo
+                    </th>
+                    <th>
+                        Descripción
+                    </th>
+                    <th>
+                        Precio
+                    </th>
+                    <th>
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+@* Cargar parcial para agregar o actualizar *@
+@Html.Partial("_modal")
+@section Scripts{
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/DataTable")
+@Scripts.Render("~/bundles/crud")
+@Styles.Render("~/Content/datatablecss")
+<script>
+    // Cargar datatable
+    generarDataTable(
+        '/Articulos/getArticulos/', 3,
+        "tableArticulos", ["Codigo", "Descripcion", "Precio", "Id"],
+        [
+            '/Articulos/Edit',
+            '/Articulos/Details',
+            '/Articulos/Delete'
+        ]);
+</script>
+ }

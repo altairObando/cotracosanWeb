@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Conductores";
+}
+<h2>Lista de Conductores</h2>
+
+<p>
+    <button class="btn btn-success" onclick="getHtmlData('/Conductores/Create/')" type="button" data-toggle="modal" data-target="#modal-default"> Nuevo Conductor</button>
+</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table" id="tableConductores">
+                <thead>
+                    <tr>
+                        <th>
+                            Licencia
+                        </th>
+                        <th>
+                            Nombres
+                        </th>
+                        <th>
+                            Primer Apellido
+                        </th>
+                        <th>
+                            Segundo Apellido
+                        </th>
+                        <th>
+                            Acciones
+                        </th>
+                    </tr>
+
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+@Html.Partial("_modal")
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/DataTable")
+    @Scripts.Render("~/bundles/crud")
+    @Styles.Render("~/Content/datatablecss")
+    <script>
+    // Cargar datatable
+    generarDataTable(
+        '/Conductores/getConductores/', 4,
+        "tableConductores", [ "Licencia", "Nombres", "Apellido1", "Apellido2", "Id"],
+        [
+            '/Conductores/Edit',
+            '/Conductores/Details',
+            '/Conductores/Delete'
+        ]);
+    </script>
+}

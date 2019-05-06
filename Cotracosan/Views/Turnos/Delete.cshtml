@@ -1,0 +1,44 @@
+﻿@model Cotracosan.Models.Cotracosan.Turnos
+
+@{
+    Layout = null;
+}
+<h3>¿Esta seguro de eliminar el turno?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoDeTurno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoDeTurno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HoraDeSalida)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HoraDeSalida)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HoraDeLlegada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HoraDeLlegada)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm("Delete", "Turnos", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", @class = "form-inline" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color offset-8">
+            <input type="submit" value="Eliminar Turno" class="btn btn-danger" />
+        </div>
+    }
+</div>

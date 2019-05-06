@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+<div class="row">
+    @* Tabla para mostrar contenido *@
+    <div class="col-md-6">
+        <div class="table-responsive-lg">
+            <table class="table" id="tableRoles">
+                <thead>
+                    <tr>
+                        <th> Descripción</th>
+                        <th> Numero de Usuarios </th>
+                        <th> Acciones </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    @* Formulario para agregar o actualizar contenido *@
+    <br />
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Formulario Roles
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Creación de roles</h5>
+                @using (Html.BeginForm("Create", "Roles", FormMethod.Post, new { onsubmit = "return SubmitForm(this)"}))
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="text" id="Descripcion" name="Descripcion" class="form-control" placeholder="Ingrese la descripción del rol" style="width: 100% !important;" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:1em">
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-warning" onclick="cancelarEdicion()">Cancelar</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-default" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                @*<h4 class="modal-title">Roles</h4>*@
+            </div>
+            <div class="modal-body" id="parcialCreateUpdate">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- Fin del cuadro de dialogo -->
+
+@section Scripts{
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/DataTable")
+@Styles.Render("~/Content/datatablecss")
+<script src="~/Scripts/cotracosan/RolesScript.js"></script>
+<script>
+    loadDataTable();
+</script>
+}

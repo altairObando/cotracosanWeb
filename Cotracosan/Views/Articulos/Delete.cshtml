@@ -1,0 +1,44 @@
+﻿@model Cotracosan.Models.Cotracosan.Articulos
+
+@{
+    Layout = null;
+}
+
+<h3>Confirme el Borrado</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoDeArticulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoDeArticulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DescripcionDeArticulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescripcionDeArticulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Precio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Precio)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm("Delete", "Articulos", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" })) { 
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color col-md-4 offset-10">
+            <input type="submit" value="Borrar" class="btn btn-danger" />
+        </div>
+    }
+</div>

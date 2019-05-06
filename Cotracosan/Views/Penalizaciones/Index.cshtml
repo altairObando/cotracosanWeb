@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Penalizaciones";
+}
+
+<h2>Listado de Penalizaciones</h2>
+<p>
+    <button class="btn btn-success" onclick="getHtmlData('/Penalizaciones/Create/')" type="button" data-toggle="modal" data-target="#modal-default"> Nueva Penalización</button>
+</p>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table" id="tablePenalizaciones">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Valor</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+@* Cargar parcial para agregar o actualizar *@
+@Html.Partial("_modal")
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/DataTable")
+    @Scripts.Render("~/bundles/crud")
+    @Styles.Render("~/Content/datatablecss")
+    <script>
+    // Cargar datatable
+    generarDataTable(
+        '/Penalizaciones/getPenalizaciones/', 2,
+        "tablePenalizaciones", ["Codigo", "Valor", "Id"],
+        [
+            '/Penalizaciones/Edit',
+            '/Penalizaciones/Details',
+            '/Penalizaciones/Delete'
+        ]);
+    </script>
+}

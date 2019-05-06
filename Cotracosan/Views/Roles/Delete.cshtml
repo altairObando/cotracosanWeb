@@ -1,0 +1,29 @@
+﻿@model Cotracosan.Models.RolViewModel
+@{
+    Layout = null;
+}
+<h3>¿Eliminar el rol @Model.Name?</h3>
+@if (Model.Usuarios.Count > 0)
+{
+    <h5>Los siguientes usuarios seran afectados</h5>
+    <hr />
+    <dl>
+        @foreach (var item in Model.Usuarios)
+        {
+            <dt>Usuario</dt>
+            <dd>@item.UserName</dd>
+            <dt>Correo</dt>
+            <dd>@item.Email</dd>
+        }
+    </dl>
+}
+@using (Html.BeginForm("Delete", "Roles", FormMethod.Post, new { onsubmit = "return deleteRoles(this)" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id, new { @value =Model.Id })
+    <div class="form-actions no-color">
+        <div class="col-md-offset-4">
+            <input type="submit" value="¿Eliminar el rol @Model.Name?" class="btn btn-danger" />
+        </div>
+    </div>
+}

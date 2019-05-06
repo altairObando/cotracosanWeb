@@ -1,0 +1,37 @@
+﻿@model Cotracosan.Models.Cotracosan.Turnos
+
+@{
+    Layout = null;
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoDeTurno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoDeTurno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HoraDeSalida)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HoraDeSalida)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HoraDeLlegada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HoraDeLlegada)
+        </dd>
+
+    </dl>
+</div>

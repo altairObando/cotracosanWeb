@@ -1,0 +1,36 @@
+﻿@model Cotracosan.Models.Cotracosan.Articulos
+
+@{
+    Layout = null;
+}
+
+<div>
+    <h4>Articulos</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoDeArticulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoDeArticulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DescripcionDeArticulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescripcionDeArticulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Precio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Precio)
+        </dd>
+
+    </dl>
+</div>

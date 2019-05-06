@@ -1,0 +1,59 @@
+﻿@model Cotracosan.Models.Cotracosan.Conductores
+
+@{
+    Layout = null;
+}
+
+<h2>Nuevo Conductor</h2>
+
+
+@using (Html.BeginForm("Create", "Conductores", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Licencia, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Licencia, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Licencia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nombres, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nombres, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Apellido1Conductor, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Apellido1Conductor, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Apellido1Conductor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Apellido2Conductor, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Apellido2Conductor, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Apellido2Conductor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.EditorFor(model => model.Estado, new { htmlAttributes = new {@checked = "checked", @value="true",@hidden = "hidden" } })
+
+        <div class="form-group">
+            <div class="offset-10 col-md-4">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

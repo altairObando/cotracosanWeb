@@ -1,0 +1,45 @@
+﻿@model Cotracosan.Models.Cotracosan.Penalizaciones
+
+@{
+    Layout = null;
+}
+
+<h2>Nueva Penalización</h2>
+
+
+@using (Html.BeginForm("Create", "Penalizaciones", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CodigoPenalizacion, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.CodigoPenalizacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CodigoPenalizacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.EditorFor(model => model.Estado, new { htmlAttributes = new { @class = "form-control",@hidden="hidden" } })
+
+        <div class="form-group">
+            <div class="offset-8 col-md-6">
+                <input type="submit" value="Guardar Nuevo" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

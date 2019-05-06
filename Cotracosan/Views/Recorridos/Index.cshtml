@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Cotracosan.Models.Cotracosan.LugaresFinalesDelosRecorridos>
+
+@{
+    ViewBag.Title = "Recorridos";
+}
+<h2>Lugares finales de Recorrido</h2>
+
+<p>
+    <button class="btn btn-success" onclick="getHtmlData('/Recorridos/Create/')" type="button" data-toggle="modal" data-target="#modal-default"> Nuevo Recorrido</button>
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table" id="tableRecorridos">
+                <thead>
+                    <tr>
+                        <th>
+                            Código del Lugar
+                        </th>
+                        <th>
+                            Nombre del lugar
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+@* Cargar parcial para agregar o actualizar *@
+@Html.Partial("_modal")
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/DataTable")
+    @Scripts.Render("~/bundles/crud")
+    @Styles.Render("~/Content/datatablecss")
+    <script>
+    // Cargar datatable
+    generarDataTable(
+        '/Recorridos/getRecorridos/', 2,
+        "tableRecorridos", ["Codigo", "Nombre", "Id"],
+        [
+            '/Recorridos/Edit',
+            '/Recorridos/Details',
+            '/Recorridos/Delete'
+        ]);
+    </script>
+}

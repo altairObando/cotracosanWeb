@@ -1,0 +1,66 @@
+﻿@model Cotracosan.Models.Cotracosan.Creditos
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Creditos</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Vehiculos.Placa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vehiculos.Placa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoCredito)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoCredito)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDeCredito)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaDeCredito)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MontoTotal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MontoTotal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EstadoDeCredito)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EstadoDeCredito)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditoAnulado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditoAnulado)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

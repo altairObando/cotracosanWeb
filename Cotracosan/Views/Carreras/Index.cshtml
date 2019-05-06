@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Cotracosan.Models.Cotracosan.Carreras>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Conductores.Licencia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LugaresFinalesDelosRecorridos.CodigoDeLugar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Penalizaciones.CodigoPenalizacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Turnos.CodigoDeTurno)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Vehiculos.Placa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CodigoCarrera)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDeCarrera)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HoraRealDeLlegada)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CarreraAnulada)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MontoRecaudado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Multa)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Conductores.Licencia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LugaresFinalesDelosRecorridos.CodigoDeLugar)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Penalizaciones.CodigoPenalizacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Turnos.CodigoDeTurno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Vehiculos.Placa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CodigoCarrera)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaDeCarrera)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HoraRealDeLlegada)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CarreraAnulada)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MontoRecaudado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Multa)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

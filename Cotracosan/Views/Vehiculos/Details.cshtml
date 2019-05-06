@@ -1,0 +1,28 @@
+﻿@model Cotracosan.Models.Cotracosan.Vehiculos
+
+@{
+    Layout = null;
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Socios.CodigoSocio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Socios.CodigoSocio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Placa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Placa)
+        </dd>
+
+    </dl>
+</div>

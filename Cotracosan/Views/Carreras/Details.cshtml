@@ -1,0 +1,106 @@
+﻿@model Cotracosan.Models.Cotracosan.Carreras
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Carreras</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Conductores.Licencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Conductores.Licencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LugaresFinalesDelosRecorridos.CodigoDeLugar)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LugaresFinalesDelosRecorridos.CodigoDeLugar)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Penalizaciones.CodigoPenalizacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Penalizaciones.CodigoPenalizacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Turnos.CodigoDeTurno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Turnos.CodigoDeTurno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vehiculos.Placa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vehiculos.Placa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoCarrera)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoCarrera)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDeCarrera)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaDeCarrera)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HoraRealDeLlegada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HoraRealDeLlegada)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CarreraAnulada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CarreraAnulada)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MontoRecaudado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MontoRecaudado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Multa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Multa)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

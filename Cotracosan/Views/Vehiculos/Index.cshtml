@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Vehiculos";
+}
+
+<h2>Lista de Vehiculos</h2>
+
+<p>
+    <button class="btn btn-success" onclick="getHtmlData('/Vehiculos/Create/')" type="button" data-toggle="modal" data-target="#modal-default"> Nuevo Vehiculo</button>
+</p>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table" id="tableVehiculos">
+                <thead>
+                    <tr>
+                        <th>
+                            Placa
+                        </th>
+                        <th>
+                            Socio
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@* Cargar parcial para agregar o actualizar *@
+@Html.Partial("_modal")
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/DataTable")
+    @Scripts.Render("~/bundles/crud")
+    @Styles.Render("~/Content/datatablecss")
+    <script>
+    // Cargar datatable
+    generarDataTable(
+        '/Vehiculos/getVehiculos/', 2,
+        "tableVehiculos", ["Placa", "Socio", "Id"],
+        [
+            '/Vehiculos/Edit',
+            '/Vehiculos/Details',
+            '/Vehiculos/Delete'
+        ]);
+    </script>
+}

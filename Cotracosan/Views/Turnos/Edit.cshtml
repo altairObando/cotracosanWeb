@@ -1,0 +1,48 @@
+﻿@model Cotracosan.Models.Cotracosan.Turnos
+
+@{
+    Layout = null;
+}
+
+<h2>Editar Turno</h2>
+
+
+@using (Html.BeginForm("Create", "Turnos", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CodigoDeTurno, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.CodigoDeTurno, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CodigoDeTurno, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.HoraDeSalida, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.HoraDeSalida, new { htmlAttributes = new { @class = "form-control", @type ="time" } })
+                @Html.ValidationMessageFor(model => model.HoraDeSalida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.HoraDeLlegada, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.HoraDeLlegada, new { htmlAttributes = new { @class = "form-control",  @type = "time" } })
+                @Html.ValidationMessageFor(model => model.HoraDeLlegada, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-10 offset-8">
+                <input type="submit" value="Guardar Cambios" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+}

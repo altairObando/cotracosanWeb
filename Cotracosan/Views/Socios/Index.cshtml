@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Socios";
+}
+<br />
+<h2>Listado oficial de socios</h2>
+<p>
+    <button class="btn btn-success" onclick="getHtmlData('/Socios/Create/')" type="button" data-toggle="modal" data-target="#modal-default">
+        Nuevo Socio
+    </button>
+</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table" id="tableSocios">
+                <thead>
+                    <tr>
+                        <th>
+                            Codigo
+                        </th>
+                        <th>
+                            Nombres
+                        </th>
+                        <th>
+                            Primer Apellido
+                        </th>
+                        <th>
+                            Segundo Apellido
+                        </th>
+                        <th>
+                            Vehiculos
+                        </th>
+                        <th>
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+@Html.Partial("_modal")
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/DataTable")
+    @Scripts.Render("~/bundles/crud")
+    @Styles.Render("~/Content/datatablecss")
+    <script>
+    // Cargar datatable
+    generarDataTable(
+        '/Socios/getSocios/', 5,
+        "tableSocios", ["Codigo", "Nombres", "Apellido1", "Apellido2", "Vehiculos", "Id"],
+        [
+            '/Socios/Edit',
+            '/Socios/Details',
+            '/Socios/Delete'
+        ]);
+    </script>
+}
