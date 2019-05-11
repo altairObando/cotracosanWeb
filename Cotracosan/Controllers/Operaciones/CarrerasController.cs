@@ -14,12 +14,30 @@ namespace Cotracosan.Controllers.Operaciones
     public class CarrerasController : Controller
     {
         private Context db = new Context();
-
-        // GET: Carreras
-        public async Task<ActionResult> Index()
+        //GET: Carreras/getCarreras
+        [HttpPost]
+        public async Task<JsonResult> getCarreras()
         {
-            var carreras = db.Carreras.Include(c => c.Conductores).Include(c => c.LugaresFinalesDelosRecorridos).Include(c => c.Penalizaciones).Include(c => c.Turnos).Include(c => c.Vehiculos);
-            return View(await carreras.ToListAsync());
+            var carreras = await db.Carreras.Include(c => c.Conductores).Include(c => c.LugaresFinalesDelosRecorridos).Include(c => c.Penalizaciones).Include(c => c.Turnos).Include(c => c.Vehiculos).ToListAsync();
+            var p = from item in carreras
+                    where item.Estado
+                    select new
+                    {
+                        Conductor = item.Conductores.NombreCompleto,
+                        Vehiculo = item.Vehiculos.Placa,
+                        Lugar = item.LugaresFinalesDelosRecorridos.NombreDeLugar,
+                        Fecha = item.FechaDeCarrera.Date.ToShortDateString(),
+                        Hora = item.HoraRealDeLlegada.ToString(),
+                        Monto = item.MontoRecaudado,
+                        Multa = item.Multa,
+                        Id = item.Id                     
+                    };
+            return Json(new { data = p }, JsonRequestBehavior.AllowGet);
+        }
+        // GET: Carreras
+        public ActionResult Index()
+        {            
+            return View();
         }
 
         // GET: Carreras/Details/5
@@ -40,10 +58,10 @@ namespace Cotracosan.Controllers.Operaciones
         // GET: Carreras/Create
         public ActionResult Create()
         {
-            ViewBag.ConductorId = new SelectList(db.Conductores, "Id", "Licencia");
-            ViewBag.LugarFinalDeRecorridoId = new SelectList(db.LugaresFinalesDelosRecorridos, "Id", "CodigoDeLugar");
+            ViewBag.ConductorId = new SelectList(db.Conductores, "Id", "NombreCompleto");
+            ViewBag.LugarFinalDeRecorridoId = new SelectList(db.LugaresFinalesDelosRecorridos, "Id", "NombreDeLugar");
             ViewBag.PenalizacionId = new SelectList(db.Penalizaciones, "Id", "CodigoPenalizacion");
-            ViewBag.TurnoId = new SelectList(db.Turnos, "Id", "CodigoDeTurno");
+            ViewBag.TurnoId = new SelectList(db.Turnos, "Id", "HorasTurno");
             ViewBag.VehiculoId = new SelectList(db.Vehiculos, "Id", "Placa");
             return View();
         }
@@ -62,10 +80,10 @@ namespace Cotracosan.Controllers.Operaciones
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ConductorId = new SelectList(db.Conductores, "Id", "Licencia", carreras.ConductorId);
-            ViewBag.LugarFinalDeRecorridoId = new SelectList(db.LugaresFinalesDelosRecorridos, "Id", "CodigoDeLugar", carreras.LugarFinalDeRecorridoId);
+            ViewBag.ConductorId = new SelectList(db.Conductores, "Id", "NombreCompleto", carreras.ConductorId);
+            ViewBag.LugarFinalDeRecorridoId = new SelectList(db.LugaresFinalesDelosRecorridos, "Id", "NombreDeLugar", carreras.LugarFinalDeRecorridoId);
             ViewBag.PenalizacionId = new SelectList(db.Penalizaciones, "Id", "CodigoPenalizacion", carreras.PenalizacionId);
-            ViewBag.TurnoId = new SelectList(db.Turnos, "Id", "CodigoDeTurno", carreras.TurnoId);
+            ViewBag.TurnoId = new SelectList(db.Turnos, "Id", "HorasTurno", carreras.TurnoId);
             ViewBag.VehiculoId = new SelectList(db.Vehiculos, "Id", "Placa", carreras.VehiculoId);
             return View(carreras);
         }

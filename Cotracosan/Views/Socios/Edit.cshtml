@@ -12,7 +12,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-
+        <input name="@Html.NameFor(m => m.Estado)" id="@Html.IdFor(x=> x.Estado)" value="True" hidden readonly />
         <div class="form-group">
             @Html.LabelFor(model => model.CodigoSocio, htmlAttributes: new { @class = "control-label col-md-4" })
             <div class="col-md-8">

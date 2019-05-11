@@ -23,6 +23,7 @@ namespace Cotracosan.Controllers.Catalogos
         {
             var lista = await db.Articulos.ToListAsync();
             var proyeccion = from item in lista
+                             where item.Estado
                        select new
                        {
                            Id = item.Id,
@@ -64,8 +65,9 @@ namespace Cotracosan.Controllers.Catalogos
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,CodigoDeArticulo,DescripcionDeArticulo,Precio")] Articulos articulos)
+        public async Task<ActionResult> Create([Bind(Include = "Id,CodigoDeArticulo,DescripcionDeArticulo,Precio,Estado")] Articulos articulos)
         {
+            articulos.Estado = true;
             if (ModelState.IsValid)
             {
                 db.Articulos.Add(articulos);
@@ -96,12 +98,13 @@ namespace Cotracosan.Controllers.Catalogos
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,CodigoDeArticulo,DescripcionDeArticulo,Precio")] Articulos articulos)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,CodigoDeArticulo,DescripcionDeArticulo,Precio,Estado")] Articulos articulos)
         {
+            articulos.Estado = true;
             if (ModelState.IsValid)
             {
                 db.Entry(articulos).State = EntityState.Modified;
-                bool completado = await db.SaveChangesAsync() > 0 ? true : false;
+                completado = await db.SaveChangesAsync() > 0 ? true : false;
                 mensaje = completado ? "Actualizado Correctamente" : "Error al guardar";
                 tipoNotificacion = completado ? "success" : "warning";
             }
@@ -129,7 +132,8 @@ namespace Cotracosan.Controllers.Catalogos
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Articulos articulos = await db.Articulos.FindAsync(id);
-            db.Articulos.Remove(articulos);
+            articulos.Estado = false;
+            db.Entry(articulos).State = EntityState.Modified;
             completado = await db.SaveChangesAsync() > 0 ? true : false;
             mensaje = completado ? "Articulo Eliminado" : "Error al guardar";
             tipoNotificacion = completado ? "success" : "warning";

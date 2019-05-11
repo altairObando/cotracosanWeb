@@ -11,45 +11,6 @@ $(function () {
         $("#parcialCreateUpdate").show();
     });
 });
-function SubmitForm(form) {
-    $.validator.unobtrusive.parse(form);
-    if ($(form).valid()) {
-        $.ajax({
-            type: "POST",
-            url: form.action,
-            data: $(form).serialize(),
-            success: function (data) {
-                if (data.success) {
-                    dataTable
-                        .ajax
-                        .reload();
-                    dataTable.search('')
-                        .columns()
-                        .search('')
-                        .draw();
-                }
-                $("#modal-default .close").click(); //Ocultar modal
-                $.notify({
-                    // Opciones
-                    message: data.mensaje,
-                    allow_dismiss: true
-                },
-            {
-                // Ajustes
-                type: data.type,
-                allow_dismiss: true,
-                placement: {
-                    from: "top",
-                    align: "center"
-                },
-            });
-            }
-        });
-    } else {
-        return false;
-    }
-    return false;
-}
 function getHtmlData(uri) {
     $("#parcialCreateUpdate").html(""); //Limpiar el contenido para evitar errores
     $.ajax({
@@ -60,7 +21,7 @@ function getHtmlData(uri) {
         }
     });
 }
-function generarDataTable(dataUrl, indexId, tableId, columnDefs, actionsUri) {
+function generarDataTable(dataUrl, indexId, tableId, columnDefs) {
     columnas = [];
     for (var i = 0; i < columnDefs.length; i++) {
         columnas.push({ 'data': columnDefs[i] });
@@ -74,9 +35,7 @@ function generarDataTable(dataUrl, indexId, tableId, columnDefs, actionsUri) {
         "columnDefs": [
         {
             "targets": indexId, "render": function (data) {
-                var buttons = ' <a href="#" onclick=getHtmlData("' + actionsUri[0] + '/' + data + '") class="btn btn-warning" data-toggle="modal" data-target="#modal-default"> Editar </a> |';
-                buttons += ' <a href="#" onclick=getHtmlData("' + actionsUri[1] + '/' + data + '") class="btn btn-info" data-toggle="modal" data-target="#modal-default"> Detalle </a> |';
-                buttons += ' <a href="#" onclick=getHtmlData("' + actionsUri[2] + '/' + data + '") class="btn btn-danger" data-toggle="modal" data-target="#modal-default">Eliminar </a>';
+                var buttons = '<a href="#" onclick=getHtmlData("/Carreras/Delete/' + data + '") class="btn btn-danger" data-toggle="modal" data-target="#modal-default">Eliminar </a>';
                 return buttons;
             }, "className": "text-center",
         }

@@ -23,6 +23,7 @@ namespace Cotracosan.Controllers.Catalogos
             var vehiculos = await db.Vehiculos.Include(v => v.Socios).ToListAsync();
             // Proyeccion para evitar referencias circulares.
             var p = from item in vehiculos
+                    where item.Estado
                     select new
                     {
                         Id = item.Id,
@@ -65,8 +66,9 @@ namespace Cotracosan.Controllers.Catalogos
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Placa,SocioId")] Vehiculos vehiculos)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Placa,SocioId,Estado")] Vehiculos vehiculos)
         {
+            vehiculos.Estado = true;
             if (ModelState.IsValid)
             {
                 db.Vehiculos.Add(vehiculos);
@@ -98,8 +100,9 @@ namespace Cotracosan.Controllers.Catalogos
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Placa,SocioId")] Vehiculos vehiculos)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Placa,SocioId,Estado")] Vehiculos vehiculos)
         {
+            vehiculos.Estado = true;
             if (ModelState.IsValid)
             {
                 db.Entry(vehiculos).State = EntityState.Modified;
@@ -131,7 +134,8 @@ namespace Cotracosan.Controllers.Catalogos
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Vehiculos vehiculos = await db.Vehiculos.FindAsync(id);
-            db.Vehiculos.Remove(vehiculos);
+            vehiculos.Estado = false;
+            db.Entry(vehiculos).State = EntityState.Modified;
             completado = await db.SaveChangesAsync() > 0 ? true : false;
             mensaje = completado ? "Eliminado Correctamente" : "Error al eliminar";
             tipoNotificacion = completado ? "success" : "danger";

@@ -33,6 +33,7 @@
                 @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
             </div>
         </div>
+        <input name="@Html.NameFor(m => m.Estado)" id="@Html.IdFor(x=> x.Estado)" value="True" hidden readonly/>
         <div class="form-group">
             <div class="col-md-4 offset-10">
                 <input type="submit" value="Guardar" class="btn btn-success" />

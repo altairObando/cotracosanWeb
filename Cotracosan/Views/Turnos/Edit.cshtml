@@ -10,7 +10,7 @@
 @using (Html.BeginForm("Create", "Turnos", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", @class = "form-inline" }))
 {
     @Html.AntiForgeryToken()
-    
+    <input name="@Html.NameFor(m => m.Estado)" id="@Html.IdFor(x=> x.Estado)" value="True" hidden readonly />
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)

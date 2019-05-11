@@ -30,6 +30,8 @@ namespace Cotracosan
                       "~/Scripts/respond.js"));
             bundles.Add(new ScriptBundle("~/bundles/crud").Include(
                       "~/Scripts/cotracosan/Crud.js"));
+            bundles.Add(new ScriptBundle("~/bundles/carreras").Include(
+                      "~/Scripts/cotracosan/Carreras.js"));
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css"));
 

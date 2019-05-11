@@ -20,6 +20,24 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="@Url.Action("Index","Home")">Inicio<span class="sr-only">(current)</span></a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","Carreras")">Carreras</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","Creditos")">Creditos</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","Abonos")">Abonos </a>
+                </li>
+
+                @if (User.IsInRole("Administrador"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Roles")">Roles</a>
+                    </li>
+                }
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Catalogos
@@ -41,13 +59,7 @@
                     <a class="nav-link" href="@Url.Action("Contact","Home")">Contacto</a>
                 </li>
                 @* Acciones de Administrador *@
-                @if (User.IsInRole("Administrador"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "Roles")">Roles</a>
-                    </li>
-                }
-               
+                
             </ul>
             @Html.Partial("_LoginPartial")
         </div>

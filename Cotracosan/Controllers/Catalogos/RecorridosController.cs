@@ -23,6 +23,7 @@ namespace Cotracosan.Controllers.Catalogos
         {
             var lista = await db.LugaresFinalesDelosRecorridos.ToListAsync();
             var p = from item in lista
+                    where item.Estado
                     select new
                     {
                         Id = item.Id,
@@ -63,8 +64,9 @@ namespace Cotracosan.Controllers.Catalogos
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,CodigoDeLugar,NombreDeLugar")] LugaresFinalesDelosRecorridos lugaresFinalesDelosRecorridos)
+        public async Task<ActionResult> Create([Bind(Include = "Id,CodigoDeLugar,NombreDeLugar,Estado")] LugaresFinalesDelosRecorridos lugaresFinalesDelosRecorridos)
         {
+            lugaresFinalesDelosRecorridos.Estado = true;
             if (ModelState.IsValid)
             {
                 db.LugaresFinalesDelosRecorridos.Add(lugaresFinalesDelosRecorridos);
@@ -95,8 +97,9 @@ namespace Cotracosan.Controllers.Catalogos
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,CodigoDeLugar,NombreDeLugar")] LugaresFinalesDelosRecorridos lugaresFinalesDelosRecorridos)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,CodigoDeLugar,NombreDeLugar,Estado")] LugaresFinalesDelosRecorridos lugaresFinalesDelosRecorridos)
         {
+            lugaresFinalesDelosRecorridos.Estado = true;
             if (ModelState.IsValid)
             {
                 db.Entry(lugaresFinalesDelosRecorridos).State = EntityState.Modified;
@@ -128,7 +131,8 @@ namespace Cotracosan.Controllers.Catalogos
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             LugaresFinalesDelosRecorridos lugaresFinalesDelosRecorridos = await db.LugaresFinalesDelosRecorridos.FindAsync(id);
-            db.LugaresFinalesDelosRecorridos.Remove(lugaresFinalesDelosRecorridos);
+            lugaresFinalesDelosRecorridos.Estado = false;
+            db.Entry(lugaresFinalesDelosRecorridos).State = EntityState.Modified;
             completado = await db.SaveChangesAsync() > 0 ? true : false;
             mensaje = completado ? "Eliminado Correctamente" : "Error al eliminar";
             tipoNotificacion = completado ? "success" : "warning";

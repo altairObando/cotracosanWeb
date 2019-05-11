@@ -24,6 +24,7 @@ namespace Cotracosan.Controllers.Catalogos
             var list = await db.Turnos.ToListAsync();
             // Realizar una proyeccion para evitar referencias circulares
             var result = from item in list
+                         where item.Estado
                          select new
                          {
                              Codigo = item.CodigoDeTurno,
@@ -34,7 +35,7 @@ namespace Cotracosan.Controllers.Catalogos
             return Json( new { data = result}, JsonRequestBehavior.AllowGet);
         }
         // GET: Turnos
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             return View();
         }
@@ -63,8 +64,9 @@ namespace Cotracosan.Controllers.Catalogos
         // POST: Turnos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> Create([Bind(Include = "Id,CodigoDeTurno,HoraDeSalida,HoraDeLlegada")] Turnos turnos)
+        public async Task<JsonResult> Create([Bind(Include = "Id,CodigoDeTurno,HoraDeSalida,HoraDeLlegada,Estado")] Turnos turnos)
         {
+            turnos.Estado = true;
             if (ModelState.IsValid)
             {
                 db.Turnos.Add(turnos);
@@ -93,8 +95,9 @@ namespace Cotracosan.Controllers.Catalogos
         // POST: Turnos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,CodigoDeTurno,HoraDeSalida,HoraDeLlegada")] Turnos turnos)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,CodigoDeTurno,HoraDeSalida,HoraDeLlegada,Estado")] Turnos turnos)
         {
+            turnos.Estado = true;
             if (ModelState.IsValid)
             {
                 db.Entry(turnos).State = EntityState.Modified;
@@ -126,7 +129,8 @@ namespace Cotracosan.Controllers.Catalogos
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Turnos turnos = await db.Turnos.FindAsync(id);
-            db.Turnos.Remove(turnos);
+            turnos.Estado = false;
+            db.Entry(turnos).State = EntityState.Modified;
             completado = await db.SaveChangesAsync() > 0 ? true : false;
             mensaje = completado ? "Turno Eliminado" : "Error al guardar";
             tipoNotificacion = completado ? "success" : "warning";

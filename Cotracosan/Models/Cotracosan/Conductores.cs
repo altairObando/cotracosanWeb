@@ -38,5 +38,8 @@ namespace Cotracosan.Models.Cotracosan
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Carreras> Carreras { get; set; }
+
+        [NotMapped]
+        public string NombreCompleto { get { return this.Nombres + " " + this.Apellido1Conductor; } }
     }
 }
