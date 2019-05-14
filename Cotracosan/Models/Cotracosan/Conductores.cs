@@ -13,7 +13,7 @@ namespace Cotracosan.Models.Cotracosan
         {
             Carreras = new HashSet<Carreras>();
         }
-
+        [Display(Name ="Conductor")]
         public int Id { get; set; }
 
         [Required]

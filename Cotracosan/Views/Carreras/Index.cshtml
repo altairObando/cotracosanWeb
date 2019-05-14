@@ -4,25 +4,44 @@
     ViewBag.Title = "Carreras";
 }
 <h2>Lista de Carreras</h2>
+<div class="row">
+    <div class="col-md-4">
+        <p>
+            @Html.ActionLink("Nueva Carrera", "Create", null, new { @class = "btn btn-success" })
+        </p>
+    </div>
+    <div class="col-md-5">
+        <div class="row" id="spinner">
+            <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Cargando Contenido
+            </button>
+        </div>
+    </div>
+</div>
 
-<p>
-    @Html.ActionLink("Nueva Carrera", "Create", null, new { @class="btn btn-lg btn-success"})
-</p>
-<table class="table" id="tableCarreras">
-    <thead>
-        <tr>
-            <th>Conductor</th>
-            <th>Vehiculo</th>
-            <th>Lugar Final</th>
-            <th>Fecha Carrera</th>
-            <th>Hora</th>
-            <th>Monto</th>
-            <th>Multa</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table" id="tableCarreras">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Conductor</th>
+                        <th>Vehiculo</th>
+                        <th>Fecha Carrera</th>
+                        <th>Monto Recaudado</th>
+                        <th>Multa</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
 @Html.Partial("_modal")
+
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/DataTable")
@@ -31,8 +50,8 @@
     <script>
     // Cargar datatable
     generarDataTable(
-        '/Carreras/getCarreras/', 7,
-        "tableCarreras", ["Conductor", "Vehiculo", "Lugar","Fecha", "Hora","Monto","Multa", "Id"],
+        '/Carreras/getCarreras/', 6,
+        "tableCarreras", ["Codigo", "Conductor", "Vehiculo","Fecha","Monto","Multa", "Id"],
         [
             '/Carreras/Edit',
             '/Carreras/Details',

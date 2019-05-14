@@ -28,6 +28,12 @@ namespace Cotracosan.Models.Cotracosan
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Carreras> Carreras { get; set; }
         [NotMapped]
-        public string HorasTurno { get { return string.Format("{0:HH\\:mm} - {1:HH\\:mm}", HoraDeSalida, HoraDeLlegada); } }
+        public string HorasTurno { get {
+
+                string salida = string.Format("{0}:{1} {2}", (HoraDeSalida.Hours % 12), HoraDeSalida.ToString(@"mm"), HoraDeSalida.Hours > 11 ? "PM" : "AM");
+                string llegada = string.Format("{0}:{1} {2}", (HoraDeLlegada.Hours % 12), HoraDeLlegada.ToString(@"mm"), HoraDeLlegada.Hours > 11 ? "PM" : "AM");
+
+                return salida + " - " + llegada;
+            } }
     }
 }

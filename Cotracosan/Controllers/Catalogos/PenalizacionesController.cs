@@ -73,6 +73,8 @@ namespace Cotracosan.Controllers.Catalogos
                 completado = await db.SaveChangesAsync() > 0 ? true : false;
                 mensaje = completado ? "Guardado Correctamente" : "Error al guardar";
                 tipoNotificacion = completado ? "success" : "warning";
+                // Actualizar todas las penalizaciones en false.
+                db.Database.ExecuteSqlCommand("UPDATE dbo.Penalizaciones SET Estado='0' WHERE Id !=" + penalizaciones.Id);
             }
             return Json(new
             {

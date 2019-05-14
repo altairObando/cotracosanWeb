@@ -11,11 +11,11 @@ namespace Cotracosan.Models.Cotracosan
         public int Id { get; set; }
 
         [Required]
-        [Display(Name = "Codigo")]
+        [Display(Name = "Codigo de Carrera")]
         public string CodigoCarrera { get; set; }
         [Display(Name = "Fecha")]
         public DateTime FechaDeCarrera { get; set; }
-        [Display(Name = "Hora Llegad")]
+        [Display(Name = "Hora Llegada")]
         public TimeSpan HoraRealDeLlegada { get; set; }
         [Display(Name = "Anulada")]
         public bool CarreraAnulada { get; set; }

@@ -14,6 +14,7 @@ namespace Cotracosan.Controllers.Operaciones
     public class CarrerasController : Controller
     {
         private Context db = new Context();
+        #region AjaxActions
         //GET: Carreras/getCarreras
         [HttpPost]
         public async Task<JsonResult> getCarreras()
@@ -23,17 +24,31 @@ namespace Cotracosan.Controllers.Operaciones
                     where item.Estado
                     select new
                     {
+                        Codigo = item.CodigoCarrera,
                         Conductor = item.Conductores.NombreCompleto,
                         Vehiculo = item.Vehiculos.Placa,
-                        Lugar = item.LugaresFinalesDelosRecorridos.NombreDeLugar,
                         Fecha = item.FechaDeCarrera.Date.ToShortDateString(),
-                        Hora = item.HoraRealDeLlegada.ToString(),
                         Monto = item.MontoRecaudado,
                         Multa = item.Multa,
                         Id = item.Id                     
                     };
             return Json(new { data = p }, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult GetMulta(int id, string horaRealLlegada)
+        {
+            // Obtener la hora que deberia de haber llegado.
+            TimeSpan horaLlegada = db.Turnos.Find(id).HoraDeLlegada;
+            TimeSpan horaReal = TimeSpan.Parse(horaRealLlegada);
+            // Cantidad de minutos tarde
+            decimal difMinutos = Convert.ToDecimal(horaReal.Subtract(horaLlegada).TotalMinutes);
+            // Cantidad a descontar por cada minuto tarde
+            decimal valor = db.Penalizaciones.FirstOrDefault(x => x.Estado).Cantidad;
+            decimal multa = difMinutos > 0 ? valor * difMinutos : 0;
+
+            return Json(new { data = multa}, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
         // GET: Carreras
         public ActionResult Index()
         {            
@@ -58,31 +73,46 @@ namespace Cotracosan.Controllers.Operaciones
         // GET: Carreras/Create
         public ActionResult Create()
         {
+            // Obtener la penalizacion vigente
+            var p = db.Penalizaciones.Where(x => x.Estado).FirstOrDefault();
+            ViewBag.PenalizacionId = p.Id;
+
+            ViewBag.CodigoCarrera = GetCodigoCarrera();
             ViewBag.ConductorId = new SelectList(db.Conductores, "Id", "NombreCompleto");
             ViewBag.LugarFinalDeRecorridoId = new SelectList(db.LugaresFinalesDelosRecorridos, "Id", "NombreDeLugar");
-            ViewBag.PenalizacionId = new SelectList(db.Penalizaciones, "Id", "CodigoPenalizacion");
             ViewBag.TurnoId = new SelectList(db.Turnos, "Id", "HorasTurno");
             ViewBag.VehiculoId = new SelectList(db.Vehiculos, "Id", "Placa");
             return View();
         }
+        public string GetCodigoCarrera()
+        {
+            int ultimaIdCarrera = 0;
+            var carrerasList = db.Carreras.ToList();
+            if (carrerasList.Count > 0)
+                ultimaIdCarrera = carrerasList.Last().Id;
+
+            return "CC" + (ultimaIdCarrera + 1);
+        }
 
         // POST: Carreras/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,CodigoCarrera,FechaDeCarrera,HoraRealDeLlegada,CarreraAnulada,MontoRecaudado,Multa,VehiculoId,ConductorId,PenalizacionId,TurnoId,LugarFinalDeRecorridoId")] Carreras carreras)
         {
             if (ModelState.IsValid)
             {
+                carreras.Estado = true;
                 db.Carreras.Add(carreras);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            var codigo = Request["CodigoCarrera"];
+            var p = db.Penalizaciones.Where(x => x.Estado).FirstOrDefault();
+            ViewBag.PenalizacionId = p.Id;
 
+            ViewBag.CodigoCarrera = GetCodigoCarrera();
             ViewBag.ConductorId = new SelectList(db.Conductores, "Id", "NombreCompleto", carreras.ConductorId);
             ViewBag.LugarFinalDeRecorridoId = new SelectList(db.LugaresFinalesDelosRecorridos, "Id", "NombreDeLugar", carreras.LugarFinalDeRecorridoId);
-            ViewBag.PenalizacionId = new SelectList(db.Penalizaciones, "Id", "CodigoPenalizacion", carreras.PenalizacionId);
             ViewBag.TurnoId = new SelectList(db.Turnos, "Id", "HorasTurno", carreras.TurnoId);
             ViewBag.VehiculoId = new SelectList(db.Vehiculos, "Id", "Placa", carreras.VehiculoId);
             return View(carreras);
