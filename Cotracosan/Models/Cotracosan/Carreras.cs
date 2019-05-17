@@ -19,7 +19,7 @@ namespace Cotracosan.Models.Cotracosan
         public TimeSpan HoraRealDeLlegada { get; set; }
         [Display(Name = "Anulada")]
         public bool CarreraAnulada { get; set; }
-        [Display(Name = "Monto")]
+        [Display(Name = "Monto Recaudado")]
         public decimal MontoRecaudado { get; set; }
         [Display(Name = "Multa")]
         public decimal Multa { get; set; }

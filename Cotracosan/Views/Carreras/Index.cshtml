@@ -5,21 +5,38 @@
 }
 <h2>Lista de Carreras</h2>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-2">
         <p>
             @Html.ActionLink("Nueva Carrera", "Create", null, new { @class = "btn btn-success" })
         </p>
     </div>
-    <div class="col-md-5">
-        <div class="row" id="spinner">
+    <div class="col-md-3">
+        <div class="row" id="spinner" style="display: none;">
             <button class="btn btn-primary" type="button" disabled>
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Cargando Contenido
             </button>
         </div>
     </div>
+    <!-- Cambiar Fechas -->
+   <div class="col-md-7">
+       <div class="row">
+           <div class="col-md-2">
+               <label style="margin-top:0.75em">Intervalo</label>
+           </div>
+           <div class="col-md-4">
+               <input type="date" class="form-control" id="SelectorFecha"/>
+           </div>
+           <div class="col-md-4" style="margin-top:0.3em">
+               <button class="btn btn-info" onclick="CambiarUrl()">Obtener Carreras</button>
+           </div>
+           <div class="col-md-2" style="margin-top:0.8em">
+               <a href="#" onclick="CargarTodo()">Todo</a>
+           </div>
+       </div>    
+   </div>
 </div>
-
+<hr />
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
@@ -53,9 +70,9 @@
         '/Carreras/getCarreras/', 6,
         "tableCarreras", ["Codigo", "Conductor", "Vehiculo","Fecha","Monto","Multa", "Id"],
         [
-            '/Carreras/Edit',
             '/Carreras/Details',
             '/Carreras/Delete'
         ]);
+    
     </script>
 }

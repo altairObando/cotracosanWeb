@@ -11,6 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Catalogos
 {
+    [Authorize]
     public class VehiculosController : Controller
     {
         private Context db = new Context();

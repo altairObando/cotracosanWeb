@@ -11,6 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Operaciones
 {
+    [Authorize]
     public class AbonosController : Controller
     {
         private Context db = new Context();

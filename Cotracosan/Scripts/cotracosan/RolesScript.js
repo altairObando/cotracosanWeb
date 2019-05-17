@@ -1,6 +1,16 @@
 ﻿var dataTableRoles = null;
 $edicion = false;
 $idRolEditable = "none";
+$(function () {
+    var loading = $("#loading").hide();
+    $(document).ajaxStart(function () {
+        $("#parcialCreateUpdate").hide();
+        loading.show();
+    }).ajaxStop(function () {
+        loading.hide();
+        $("#parcialCreateUpdate").show();
+    });
+});
 function loadDataTable() {
     // Cargar la tabla de roles
     dataTableRoles = $("#tableRoles").DataTable({
@@ -16,7 +26,7 @@ function loadDataTable() {
                 'data': 'id', 'render': function (id) {
 
                     let buttons = "<button class='btn btn-sm btn-warning btn-editar'>Editar</button> | ";
-                    buttons += '<a href="#" onclick=getHtmlData("/Roles/Delete/'+id+'")  class="btn btn-danger" data-toggle="modal" data-target="#modal-default"><span> <i class="fa fa-trash"></i> </span> Eliminar </a>';
+                    buttons += '<a href="#" onclick=getHtmlData("/Roles/Delete/'+id+'")  class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-default"><span> <i class="fa fa-trash"></i> </span> Eliminar </a>';
                     return buttons;
                 }
             }

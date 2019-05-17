@@ -74,9 +74,9 @@ function generarDataTable(dataUrl, indexId, tableId, columnDefs, actionsUri) {
         "columnDefs": [
         {
             "targets": indexId, "render": function (data) {
-                var buttons = ' <a href="#" onclick=getHtmlData("' + actionsUri[0] + '/' + data + '") class="btn btn-warning" data-toggle="modal" data-target="#modal-default"> Editar </a> |';
-                buttons += ' <a href="#" onclick=getHtmlData("' + actionsUri[1] + '/' + data + '") class="btn btn-info" data-toggle="modal" data-target="#modal-default"> Detalle </a> |';
-                buttons += ' <a href="#" onclick=getHtmlData("' + actionsUri[2] + '/' + data + '") class="btn btn-danger" data-toggle="modal" data-target="#modal-default">Eliminar </a>';
+                var buttons = ' <a href="#" onclick=getHtmlData("' + actionsUri[0] + '/' + data + '") class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modal-default"> Editar </a> |';
+                buttons += ' <a href="#" onclick=getHtmlData("' + actionsUri[1] + '/' + data + '") class="btn btn-sm btn-info" data-toggle="modal" data-target="#modal-default"> Detalle </a> |';
+                buttons += ' <a href="#" onclick=getHtmlData("' + actionsUri[2] + '/' + data + '") class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-default">Eliminar </a>';
                 return buttons;
             }, "className": "text-center",
         }

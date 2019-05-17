@@ -1,0 +1,67 @@
+﻿<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" ref="@Url.Action("Index","Home")">
+                <i class="mdi mdi-home menu-icon"></i>
+                <span class="menu-title">Inicio</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <i class="mdi mdi-circle-outline menu-icon"></i>
+                <span class="menu-title">Catalogos</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Articulos")">Articulos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Turnos")">Turnos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Penalizaciones")">Penalizaciones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Recorridos")">Recorridos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Vehiculos")">Vehiculos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Socios")">Socios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Conductores")">Conductores</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index","Carreras")">
+                <i class="mdi mdi-view-headline menu-icon"></i>
+                <span class="menu-title">Carreras</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index","Creditos")">
+                <i class="mdi mdi-chart-pie menu-icon"></i>
+                <span class="menu-title">Creditos</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index","Abonos")">
+                <i class="mdi mdi-grid-large menu-icon"></i>
+                <span class="menu-title">Abonos</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index", "Roles")">
+                <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                <span class="menu-title">Roles</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("About","Home")">
+                <i class="mdi mdi-emoticon menu-icon"></i>
+                <span class="menu-title">About</span>
+            </a>
+        </li>
+        
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Contact","Home")">
+                <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+                <span class="menu-title">Contacto</span>
+            </a>
+        </li>
+    </ul>
+</nav>

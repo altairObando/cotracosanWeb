@@ -1,16 +1,43 @@
 ﻿// DataTable Generica para todos las acciones basicas
 var dataTable = null;
-// Mostrar un spinner de carga
+// Mostrar un spinner de carga en el datatable
 $(function () {
     var loading = $("#spinner").hide();
     $(document).ajaxStart(function () {
         $("#parcialCreateUpdate").hide();
+        $("#loading").show();
         loading.show();
     }).ajaxStop(function () {
         loading.hide();
+        $("#loading").hide();
         $("#parcialCreateUpdate").show();
     });
 });
+$(document).ready(function () {
+    dataTable.ajax.reload();
+});
+function CambiarUrl() {
+    // Capturar la fecha seleccionada
+    let fecha = $("#SelectorFecha").val();
+    let uri = "/Carreras/GetCarreras?Fecha=" + fecha;
+    dataTable.clear().draw(false);
+    dataTable.ajax.url(uri);
+    dataTable.ajax.reload();
+    dataTable.search('')
+                        .columns()
+                        .search('')
+                        .draw();
+}
+function CargarTodo() {
+    $("#SelectorFecha").val();
+    dataTable.clear().draw(false);
+    dataTable.ajax.url("/Carreras/GetCarreras?Todo=True");
+    dataTable.ajax.reload();
+    dataTable.search('')
+                        .columns()
+                        .search('')
+                        .draw();
+}
 function getHtmlData(uri) {
     $("#parcialCreateUpdate").html(""); //Limpiar el contenido para evitar errores
     $.ajax({
@@ -27,15 +54,19 @@ function generarDataTable(dataUrl, indexId, tableId, columnDefs) {
         columnas.push({ 'data': columnDefs[i] });
     }
     dataTable = $("#" + tableId).DataTable({
+        "lengthMenu": [5, 10, 20, 50],
+        "deferLoading": 0,
         "ajax": {
             "url": dataUrl,
             "type": "POST",
             "dataType": "JSON"
-        }, "columns": columnas,
+        },
+        "columns": columnas,
         "columnDefs": [
         {
             "targets": indexId, "render": function (data) {
-                var buttons = '<a href="#" onclick=getHtmlData("/Carreras/Delete/' + data + '") class="btn btn-danger" data-toggle="modal" data-target="#modal-default">Eliminar </a>';
+                let buttons = '<a href="#" onclick=getHtmlData("/Carreras/Details/' + data + '") class="btn btn-sm btn-info" data-toggle="modal" data-target="#modal-default">Detalles </a>';
+                buttons += ' | <a href="#" onclick=getHtmlData("/Carreras/Delete/' + data + '") class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-default">Eliminar </a>';
                 return buttons;
             }, "className": "text-center",
         }, {

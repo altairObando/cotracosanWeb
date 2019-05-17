@@ -11,10 +11,42 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Operaciones
 {
+    [Authorize]
     public class CreditosController : Controller
     {
         private Context db = new Context();
-
+        // GET: Creditos/GetCreditos
+        public JsonResult GetCreditos()
+        {
+            var creditos = db.Creditos.ToList();
+            // realizar una proyeccion de los creditos y abonos.
+            var p = (from item in creditos
+                     where item.EstadoDeCredito
+                     select new Creditos
+                     {
+                         Id = item.Id,
+                         CodigoCredito = item.CodigoCredito,
+                         FechaDeCredito = item.FechaDeCredito,
+                         MontoTotal = item.MontoTotal,
+                         CreditoAnulado = item.CreditoAnulado,
+                         VehiculoId = item.VehiculoId,
+                         Vehiculos = new Vehiculos
+                         {
+                             Id = item.VehiculoId,
+                             Placa = item.Vehiculos.Placa
+                         },
+                         Abonos = item.Abonos
+                     }).ToList();
+            foreach (var item in p)
+            {
+                for (int i = 0; i < item.Abonos.Count; i++)
+                {
+                    item.Abonos.ElementAt(i).Creditos = null;
+                }
+            }
+            return Json(new { data = p }, JsonRequestBehavior.AllowGet);
+            
+        }
         // GET: Creditos
         public async Task<ActionResult> Index()
         {

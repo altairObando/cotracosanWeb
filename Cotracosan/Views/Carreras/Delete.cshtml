@@ -1,70 +1,41 @@
 ﻿@model Cotracosan.Models.Cotracosan.Carreras
 
 @{
-    ViewBag.Title = "Delete";
+    Layout = null;
+    Decimal total = Model.MontoRecaudado - Model.Multa;
+    string mostrarTotal = string.Format("{0:C}", total);
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>¿Esta seguro de eliminar la carrera @Model.CodigoCarrera?</h3>
 <div>
-    <h4>Carreras</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Conductores.Licencia)
+            Conductor - Licencia
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Conductores.Licencia)
+            @Html.DisplayFor(model => model.Conductores.NombreCompleto ) - @Model.Conductores.Licencia
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.LugaresFinalesDelosRecorridos.CodigoDeLugar)
+            Placa del vehiculo
         </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LugaresFinalesDelosRecorridos.CodigoDeLugar)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Penalizaciones.CodigoPenalizacion)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Penalizaciones.CodigoPenalizacion)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Turnos.CodigoDeTurno)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Turnos.CodigoDeTurno)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Vehiculos.Placa)
-        </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Vehiculos.Placa)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.CodigoCarrera)
+            Turno de Entrada y Salida
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CodigoCarrera)
+            @Html.DisplayFor(model => model.Turnos.HorasTurno)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.FechaDeCarrera)
+            Lugar Final
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.FechaDeCarrera)
+            @Html.DisplayFor(model => model.LugaresFinalesDelosRecorridos.NombreDeLugar )
         </dd>
 
         <dt>
@@ -76,19 +47,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CarreraAnulada)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CarreraAnulada)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.MontoRecaudado)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.MontoRecaudado)
+            @string.Format("{0:C}", Model.MontoRecaudado)
         </dd>
 
         <dt>
@@ -96,17 +59,22 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Multa)
+            @string.Format("{0:C}", Model.Multa)
         </dd>
-
+        <dt>
+            Total Ingreso
+        </dt>
+        <dd>
+           @mostrarTotal
+        </dd>
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm("Delete", "Carreras", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", @class = "form-inline" }))
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Eliminar" class="btn btn-danger offset-4" />
         </div>
     }
 </div>

@@ -1,0 +1,64 @@
+﻿@model Cotracosan.Models.Cotracosan.Carreras
+
+@{
+    ViewBag.Title = "Resumen de Carrera";
+    Decimal total = Model.MontoRecaudado - Model.Multa;
+    string mostrarTotal = string.Format("{0:C}", total);
+}
+
+@*<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary">
+                Se ha guardado la carrera
+            </div>
+            <div class="card-body">
+                <div class="dl-">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Carrera Guardada</h1>
+        <p>Se ha registrado la carrera correctamente.</p>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                @{
+                    Html.RenderPartial("Details", Model);
+                }
+            </div>
+            <div class="col-md-4">
+                <h5>Acciones posteriores</h5>
+                <div class="row">
+                    <div class="col-md-9">
+                        <a class="btn btn-success" href="#">Imprimir Reporte</a>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-9">
+                        <a class="btn btn-warning" href="@Url.Action("Create", "Creditos", new { @VehiculoId = Model.VehiculoId})">Agregar un credito al vehiculo</a>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-9">
+                        <a class="btn btn-info" href="@Url.Action("Create")">Registrar una nueva carrera</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+</div>
+
+<style>
+    .btn {
+        width:100%;
+    }
+</style>
