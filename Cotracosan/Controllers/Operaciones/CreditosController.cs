@@ -22,30 +22,25 @@ namespace Cotracosan.Controllers.Operaciones
             // realizar una proyeccion de los creditos y abonos.
             var p = (from item in creditos
                      where item.EstadoDeCredito
-                     select new Creditos
+                     select new
                      {
-                         Id = item.Id,
+                         IdCredito = item.Id,
                          CodigoCredito = item.CodigoCredito,
-                         FechaDeCredito = item.FechaDeCredito,
-                         MontoTotal = item.MontoTotal,
+                         FechaDeCredito = item.FechaDeCredito.ToShortDateString(),
+                         MontoTotal = string.Format("{0:C}", item.MontoTotal),
                          CreditoAnulado = item.CreditoAnulado,
-                         VehiculoId = item.VehiculoId,
-                         Vehiculos = new Vehiculos
-                         {
-                             Id = item.VehiculoId,
-                             Placa = item.Vehiculos.Placa
-                         },
-                         Abonos = item.Abonos
-                     }).ToList();
-            foreach (var item in p)
-            {
-                for (int i = 0; i < item.Abonos.Count; i++)
-                {
-                    item.Abonos.ElementAt(i).Creditos = null;
-                }
-            }
+                         Vehiculo = item.Vehiculos.Placa
+                     });
+            
             return Json(new { data = p }, JsonRequestBehavior.AllowGet);
             
+        }
+
+        // GET Abonos/5
+        public ActionResult Abonos(int id)
+        {
+            List<Abonos> abonos = db.Abonos.Where(x => x.CreditoId == id).ToList();
+            return View("DetalleAbonos",abonos);
         }
         // GET: Creditos
         public async Task<ActionResult> Index()
@@ -72,8 +67,16 @@ namespace Cotracosan.Controllers.Operaciones
         // GET: Creditos/Create
         public ActionResult Create()
         {
+            ViewBag.CodigoCredito = GenerarCodigoCredito();
             ViewBag.VehiculoId = new SelectList(db.Vehiculos, "Id", "Placa");
             return View();
+        }
+
+        private string GenerarCodigoCredito()
+        {
+            // Ultimo id Credito
+            int id = db.Creditos.ToList().OrderByDescending(x => x.Id).First().Id;
+            return "CRED-" + (id + 1);
         }
 
         // POST: Creditos/Create
@@ -85,11 +88,12 @@ namespace Cotracosan.Controllers.Operaciones
         {
             if (ModelState.IsValid)
             {
+                creditos.EstadoDeCredito = true;
                 db.Creditos.Add(creditos);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.CodigoCredito = GenerarCodigoCredito();
             ViewBag.VehiculoId = new SelectList(db.Vehiculos, "Id", "Placa", creditos.VehiculoId);
             return View(creditos);
         }

@@ -5,7 +5,7 @@
 <h2>Lista de Creditos Otorgados</h2>
 
 <p>
-    @Html.ActionLink("Nuevo Credito", "Create", null, new {@class="btn btn-success" })
+    @Html.ActionLink("Nuevo Credito", "Create", null, new { @class="btn btn-success" })
 </p>
 
 <div class="table-responsive">
@@ -13,13 +13,13 @@
         <thead>
             <tr>
                 <th>
-                    Placa Vehiculo
-                </th>
-                <th>
                     Codigo Credito
                 </th>
                 <th>
                     Fecha Credito
+                </th>
+                <th>
+                    Vehiculo
                 </th>
                 <th>
                     Monto Total
@@ -32,7 +32,6 @@
                 </th>
             </tr>
         </thead>
-        }
     </table>
 </div>
 
@@ -43,6 +42,5 @@
 @Styles.Render("~/Content/datatablecss")
 <script src="~/Scripts/cotracosan/Creditos.js"></script>
 <script>
-
 </script>    
 }

@@ -4,6 +4,7 @@ namespace Cotracosan.Models.Cotracosan
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
     using System.Data.Entity.Spatial;
 
     public partial class Creditos
@@ -41,5 +42,17 @@ namespace Cotracosan.Models.Cotracosan
         public virtual ICollection<DetallesDeCreditos> DetallesDeCreditos { get; set; }
 
         public virtual Vehiculos Vehiculos { get; set; }
+        [NotMapped]
+        public string InfoCredito { get {
+                return this.CodigoCredito + " " + Vehiculos.Placa + " " + string.Format("{0:C2}", MontoTotal);
+            } }
+        [NotMapped]
+        public bool Cancelado
+        {
+            get
+            {
+                return Abonos.Where(y => y.Estado).Sum(x => x.MontoDeAbono) >= MontoTotal;
+            }
+        }
     }
 }

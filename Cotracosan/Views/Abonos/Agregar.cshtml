@@ -1,0 +1,113 @@
+﻿@model Cotracosan.Models.Cotracosan.Abonos
+
+@{
+    ViewBag.Title = "Nuevo Abono";
+}
+
+<h2>Nuevo Abono</h2>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary" style="color:whitesmoke">
+                Agregar Nuevo Abono
+            </div>
+            <div class="card-body">
+                <div class="row">
+                @using (Html.BeginForm("Agregar", "Abonos", FormMethod.Post, new { @class = "form form-inline" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group col-md-5">
+                        @Html.LabelFor(model => model.FechaDeAbono,"Fecha de Abono", htmlAttributes: new { @class = "control-label col-md-5" })
+                        @Html.EditorFor(model => model.FechaDeAbono, new { htmlAttributes = new { @class = "form-control",@type="date", @readonly="readonly" } })
+                        @Html.ValidationMessageFor(model => model.FechaDeAbono, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        @Html.LabelFor(model => model.CodigoAbono, htmlAttributes: new { @class = "control-label col-md-5" })
+                            @Html.EditorFor(model => model.CodigoAbono, new { htmlAttributes = new { @class = "form-control",@readonly="readonly" } })
+                            @Html.ValidationMessageFor(model => model.CodigoAbono, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        @Html.LabelFor(model => model.MontoDeAbono, htmlAttributes: new { @class = "control-label col-md-5" })
+                        @Html.EditorFor(model => model.MontoDeAbono, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MontoDeAbono, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group  col-md-5">
+                        @Html.LabelFor(model => model.CreditoId, "Codigo Credito", htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-5">
+                            @Html.DropDownList("CreditoId", (SelectList)@ViewBag.CreditoId, "------------------------------", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CreditoId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        @Html.Label("Saldo del credito", new { @class="control-label col-md-5", @for="Saldo"})
+                        <input name="Saldo" id="Saldo" class="form-control" readonly placeholder="Saldo Del credito"/>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <div class="col-md-5 offset-1" id="spinner">
+                            <button class="btn btn-primary" type="button" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Cargando...
+                            </button>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="submit" value="Agregar Abono" class="btn btn-warning" />
+                        </div>
+                    </div>
+                }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Regresar", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/select2/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/select2/select2.full.min.js"></script>
+    <script>
+        // Estableciendo valores
+        $(document).ready(function () {
+            $("#spinner").hide();
+            $("#CodigoAbono").val('@ViewBag.CodigoAbono');
+            $("#CreditoId").select2({ width: '100%' });
+            @if(ViewBag.IdSelect2 != null)
+            {
+                <text>
+            $("#CreditoId").val(@ViewBag.IdSelect2);
+            $("#CreditoId").select2().trigger('change');
+                </text>
+            }
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+            $("#FechaDeAbono").val(today);
+        });
+        $("#CreditoId").select2().change(function () {
+            $("#spinner").show();
+
+            $.ajax({
+                url: "/Abonos/GetSaldo?CreditoId=" + $("#CreditoId").val(),
+                dataType: "JSON",
+                type: "POST",
+                data: {
+                    creditoId: $("#CreditoId").val()
+                }, success: function (data) {
+                    $("#spinner").hide();
+                    $("#Saldo").val(data.data);
+                }
+            });
+        });
+    </script>
+}

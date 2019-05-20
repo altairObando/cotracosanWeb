@@ -1,22 +1,18 @@
 ﻿@model Cotracosan.Models.Cotracosan.Abonos
 
 @{
-    ViewBag.Title = "Delete";
+    Layout = null;
 }
-
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>¿Esta seguro de borrar este abono?</h3>
 <div>
-    <h4>Abonos</h4>
-    <hr />
+    
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Creditos.CodigoCredito)
+            Datos del credito
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Creditos.CodigoCredito)
+            @Html.DisplayFor(model => model.Creditos.InfoCredito)
         </dd>
 
         <dt>
@@ -24,7 +20,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.FechaDeAbono)
+            @string.Format("{0:d}", Model.FechaDeAbono)
         </dd>
 
         <dt>
@@ -40,17 +36,25 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.MontoDeAbono)
+            @string.Format("{0:C2}", Model.MontoDeAbono)
         </dd>
-
+        <dt>
+            Saldo
+        </dt>
+        @{ 
+            decimal suma = Model.Creditos.MontoTotal - Model.Creditos.Abonos.Sum(x => x.MontoDeAbono);
+            <dd>
+                @string.Format("{0:C2}", suma)
+            </dd>
+        }
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm("Delete", "Abonos", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", @class = "form-inline" }))
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Delete" class="btn btn-warning" />
         </div>
     }
 </div>

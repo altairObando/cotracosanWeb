@@ -545,7 +545,7 @@
     <Content Include="Views\Creditos\Details.cshtml" />
     <Content Include="Views\Creditos\Edit.cshtml" />
     <Content Include="Views\Creditos\Index.cshtml" />
-    <Content Include="Views\Abonos\Create.cshtml" />
+    <Content Include="Views\Abonos\Agregar.cshtml" />
     <Content Include="Views\Abonos\Delete.cshtml" />
     <Content Include="Views\Abonos\Details.cshtml" />
     <Content Include="Views\Abonos\Edit.cshtml" />
@@ -554,6 +554,7 @@
     <Content Include="Views\Shared\_Aside.cshtml" />
     <Content Include="Views\Shared\_navbar.cshtml" />
     <Content Include="Views\Carreras\Resumen.cshtml" />
+    <Content Include="Views\Creditos\DetalleAbonos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

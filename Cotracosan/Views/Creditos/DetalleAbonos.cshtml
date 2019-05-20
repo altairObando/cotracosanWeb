@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Cotracosan.Models.Cotracosan.Abonos>
+@{ 
+    Layout = null;
+    decimal total = Model.Where(y => y.Estado).Sum(x => x.MontoDeAbono);
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaDeAbono)
+                    </th>
+                    <th>
+                        Codigo
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MontoDeAbono)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Estado)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @string.Format("{0:d}", item.FechaDeAbono)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CodigoAbono)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MontoDeAbono)
+                        </td>
+                        <td>
+                            @if (item.Estado)
+                            {
+                                <span class="badge badge-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Eliminado</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <h3>
+            Total Abonado: @string.Format("{0:C2}", total)
+        </h3>
+    </div>
+</div>

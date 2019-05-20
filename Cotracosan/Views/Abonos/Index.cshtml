@@ -1,51 +1,182 @@
-﻿@model IEnumerable<Cotracosan.Models.Cotracosan.Abonos>
-
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Abonos";
 }
 
-<h2>Index</h2>
+<h2>Listado de Abonos Otorgados</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Creditos.CodigoCredito)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaDeAbono)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CodigoAbono)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MontoDeAbono)
-        </th>
-        <th></th>
-    </tr>
+<div class="row">
+    <div class="col-md-2">
+        <p>
+            @Html.ActionLink("Nuevo Abono", "Agregar", null, new { @class = "btn btn-success" })
+        </p>
+    </div>
+    <div class="col-md-3">
+        <div class="row" id="spinner" style="display: none;">
+            <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Cargando Contenido
+            </button>
+        </div>
+    </div>
+    <!-- Cambiar Fechas -->
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-2">
+                <label style="margin-top:0.75em">Intervalo</label>
+            </div>
+            <div class="col-md-4">
+                <input type="date" class="form-control" id="SelectorFecha" />
+            </div>
+            <div class="col-md-4" style="margin-top:0.3em">
+                <button class="btn btn-info" onclick="CambiarUrl()">Obtener Abonos</button>
+            </div>
+            <div class="col-md-2" style="margin-top:0.8em">
+                <a href="#" onclick="CargarTodo()">Todo</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Creditos.CodigoCredito)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaDeAbono)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CodigoAbono)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MontoDeAbono)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table" id="tableAbonos">
+            <thead>
+                <tr>
+                    <th>Codigo Abono</th>
+                    <th>Fecha</th>
+                    <th>Credito</th>
+                    <th>Monto Abono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead><tbody></tbody>
+        </table>
+    </div>
+</div>
+<!-- Espacio para cargar el modal -->
+@Html.Partial("_modal")
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/DataTable")
+    @Styles.Render("~/Content/datatablecss")
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script>
+
+        // Loading ajax
+        $(function () {
+            var loading = $("#spinner").hide();
+            $(document).ajaxStart(function () {
+                $("#parcialCreateUpdate").hide();
+                $("#loading").show();
+                loading.show();
+            }).ajaxStop(function () {
+                loading.hide();
+                $("#loading").hide();
+                $("#parcialCreateUpdate").show();
+            });
+            // DataTable
+            dataTable = $("#tableAbonos").DataTable({
+                ajax: {
+                    url :"@Url.Action("GetAbonos")",
+                    type:"GET",
+                    dataType: "JSON",
+            }, columns: [
+                { 'data': 'CodigoAbono' },
+                { 'data': 'FechaAbono' },
+                { 'data': 'Credito' },
+                { 'data': 'MontoAbono' },
+                {
+                    'data': 'Id', 'render': function (id) {
+                        let buttons = '<a href="#" onclick=getHtmlData("@Url.Action("Details")/' + id + '") class="btn btn-sm btn-info" data-toggle="modal" data-target="#modal-default"> Detalles </a> | ';
+                        buttons += ' <a href="#" onclick=getHtmlData("@Url.Action("Delete")/'+id+'") class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal-default"> Eliminar </a>';
+                        return buttons;
+                    }
+                }
+            ]
+        });
+        });
+
+        function CambiarUrl() {
+            // Capturar la fecha seleccionada
+            let fecha = $("#SelectorFecha").val();
+            let uri = "/Abonos/GetAbonos?fechaAbono=" + fecha;
+            dataTable.clear().draw(false);
+            dataTable.ajax.url(uri);
+            dataTable.ajax.reload();
+            dataTable.search('')
+                                .columns()
+                                .search('')
+                                .draw();
+        }
+        function CargarTodo() {
+            $("#SelectorFecha").val();
+            dataTable.ajax.url("/Abonos/GetAbonos");
+            dataTable.ajax.reload();
+            dataTable.search('')
+                                .columns()
+                                .search('')
+                                .draw();
+            dataTable.clear().draw(false);
+
+        }
+        // Obtener Contenidos
+        function getHtmlData(uri) {
+            $("#parcialCreateUpdate").html(""); //Limpiar el contenido para evitar errores
+            $.ajax({
+                type: "GET",
+                url: uri,
+                success: function (data) {
+                    $("#parcialCreateUpdate").html(data);
+                }
+            });
+        }
+        // Cargar datatable
+        var dataTable = null;
+        $(document).ready(function () {
+            let fechaActual = new Date().toJSON().split('T')[0];
+            dataTable.ajax.url('/Abonos/GetAbonos?fechaAbono=' + fechaActual);
+            dataTable.ajax.reload();
+        });
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable
+                                .ajax
+                                .reload();
+                            dataTable.search('')
+                                .columns()
+                                .search('')
+                                .draw();
+                        }
+                        $("#modal-default .close").click(); //Ocultar modal
+                        $.notify({
+                            // Opciones
+                            message: data.mensaje,
+                            allow_dismiss: true
+                        },
+                    {
+                        // Ajustes
+                        type: data.type,
+                        allow_dismiss: true,
+                        placement: {
+                            from: "top",
+                            align: "center"
+                        },
+                    });
+                    }
+                });
+            } else {
+                return false;
+            }
+            return false;
+        }
+    </script>
 }
-
-</table>

@@ -25,7 +25,7 @@
                        
                        <div class="form-group col-md-5">
                            @Html.LabelFor(model => model.FechaDeCarrera,"Fecha carrera", htmlAttributes: new { @class = "control-label col-md-5" })
-                               @Html.EditorFor(m => m.FechaDeCarrera, new { htmlAttributes = new { @class = "form-control", @type="date"} })
+                               @Html.EditorFor(m => m.FechaDeCarrera, new { htmlAttributes = new { @class = "form-control", @type="date",@readonly="readonly"} })
                                @Html.ValidationMessageFor(model => model.FechaDeCarrera, "", new { @class = "text-danger" })
                        </div>
 
@@ -98,6 +98,14 @@
         //$("#FechaDeCarrera").val('@DateTime.Now.Date.ToShortDateString()');
         loadSelect2();
         addListeners();
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+        var hora = now.getHours() + ":" + now.getMinutes();
+        $("#FechaDeCarrera").val(today);
+        $("#HoraRealDeLlegada").val(hora);
     });
     </script>
 }
