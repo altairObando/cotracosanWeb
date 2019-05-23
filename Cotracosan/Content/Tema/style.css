@@ -14770,7 +14770,8 @@ button.bg-success:focus {
 }
 
 .bg-info {
-  background-color: #7859df !important;
+  background-color: #17a2b8 !important;
+  color:whitesmoke;
 }
 
 a.bg-info:hover, a.bg-info:focus,

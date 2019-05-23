@@ -180,7 +180,7 @@ namespace Cotracosan.Controllers.Operaciones
                     success = await db.SaveChangesAsync() > 0 ? true : false;
                     mensaje = success ? "Registro Eliminado" : "Error durante la eliminacion del abono";
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     transact.Rollback();
                 }

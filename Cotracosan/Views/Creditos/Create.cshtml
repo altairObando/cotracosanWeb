@@ -11,7 +11,7 @@
                 Agregar Nuevo Credito
             </div>
             <div class="card-body">
-                @using (Html.BeginForm("Create", "Creditos", FormMethod.Post, new { @class = "form form-inline" }))
+                @using (Html.BeginForm("Create", "Creditos", FormMethod.Post, new { @class = "form form-inline", @id="FormCreditos" }))
                 {
                     @Html.AntiForgeryToken()
                     <input name="@Html.NameFor(m => m.EstadoDeCredito)" id="@Html.IdFor(x=> x.EstadoDeCredito)" value="True" hidden readonly />
@@ -31,8 +31,8 @@
                     </div>
 
                     <div class="form-group col-md-5">
-                        @Html.LabelFor(model => model.MontoTotal, htmlAttributes: new { @class = "control-label col-md-5" })
-                        @Html.EditorFor(model => model.MontoTotal, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.LabelFor(model => model.MontoTotal, "Monto C$", htmlAttributes: new { @class = "control-label col-md-5" })
+                        @Html.EditorFor(model => model.MontoTotal, new { htmlAttributes = new { @class = "form-control" , @readonly="readonly"} })
                         @Html.ValidationMessageFor(model => model.MontoTotal, "", new { @class = "text-danger" })
                     </div>
 
@@ -43,45 +43,294 @@
                             @Html.ValidationMessageFor(model => model.VehiculoId, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
-                    <div class="form-group col-md-5 offset-6">
-                        <div class="col-md-10">
-                            <input type="submit" value="Crear Credito" class="btn btn-success" />
-                        </div>
-                    </div>
                 }
             </div>
-            <!-- Seccion para el detalle y la seleccion de articulos. -->
         </div>
     </div>
 </div>
+<!-- Seccion para el detalle y la seleccion de articulos. -->
+
 <div class="row">
     <div class="col-md-12">
-        <div >
-
+        <div class="card">
+            <div class="card-body">
+                <!-- Seleccion de cantidad de articulos previos al detalle -->
+                <!-- Codigo Articulo, Cantidad, Precio -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <p>Código Articulo</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p>Cantidad</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p>Precio</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <input id="CodigoArticulo" name="CodigoArticulo" placeholder="ART-XX" readonly class="form-control" type="text" data-toggle="tooltip" data-placement="top" title="Codigo del Articulo"/>
+                    </div>
+                    <div class="col-md-3">
+                        <input id="CantidadArticulo" name="CantidadArticulo" type="number" max="999" min="1" class="form-control" data-toggle="tooltip" data-placement="top" title="Cantidad"/>
+                    </div>
+                    <div class="col-md-3">
+                        <input id="PrecioArticulo" name="PrecioArticulo" type="number" min="1" step="any" class="form-control"
+                               data-toggle="tooltip" data-placement="top" title="Precio Articulo" readonly/>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-sm btn-success" type="button" id="btnAgregar">Agregar <i class="mdi mdi-table-row-plus-after"></i></button>
+                        <button class="btn btn-sm btn-info" type="button" data-toggle="modal" data-target="#modal-default">Buscar <i class="mdi mdi-magnify"></i></button>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <div class="row" style="margin-top:-1.5em;">
+                    <div class="col-md-12"style="height: 10em;overflow: auto;">
+                        <table class="table" id="tableSeleccion">
+                            <thead>
+                                <tr>
+                                    <th>Codigo Articulo</th>
+                                    <th>Descripción</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Sub Total</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!-- Tabla que muestra los articulos seleccionados -->
+            </div>
+            <!-- Sección que mostrara el sub total y total de la factura-->
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="@Url.Action("Index")" class="btn btn-sm bg-info"><i class="mdi mdi-keyboard-backspace"></i> Volver a la lista</a>
+                        
+                    </div>
+                    <div class="ml-auto">
+                        <button type="button" class="btn btn-sm bg-primary pull-right" style="color:whitesmoke" onclick="SubmitForm()">Guardar Credito <i class="mdi mdi-content-save"></i></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div>
-    @Html.ActionLink("Volver a la lista", "Index",null, new {@class="btn btn-sm btn-outline-info" })
+<!-- Cuadro de dialogo modal para mostrar los articulos-->
+<div class="modal fade" id="modal-default" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Selección de articulos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive"style="overflow:auto !important;">
+                            <table class="table" id="tableProductos" style="width:100% !important;">
+                                <thead>
+                                    <tr>
+                                        <th>Codigo Articulo</th>
+                                        <th>Descripcion</th>
+                                        <th>Precio</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info pull-right" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <link href="~/Content/select2/select2.min.css" rel="stylesheet" />
-    <script src="~/Scripts/select2/select2.full.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#VehiculoId").select2({
-                width: '100%'
-            });
-            var now = new Date();
-            var day = ("0" + now.getDate()).slice(-2);
-            var month = ("0" + (now.getMonth() + 1)).slice(-2);
-            var today = now.getFullYear() + "-" + (month) + "-" + (day);
-            $("#FechaDeCredito").val(today);
-            $("#CodigoCredito").val('@ViewBag.CodigoCredito');
+@Scripts.Render("~/bundles/jqueryval")
+<link href="~/Content/select2/select2.min.css" rel="stylesheet" />
+<script src="~/Scripts/select2/select2.full.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/DataTable")
+@Styles.Render("~/Content/datatablecss")
+<script>
+    var dataTableSeleccion = null;
+    $(document).ready(function () {
+        $("#VehiculoId").select2({
+            width: '100%'
         });
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+        $("#FechaDeCredito").val(today);
+        $("#CodigoCredito").val('@ViewBag.CodigoCredito');
+        dataTableSeleccion = $("#tableSeleccion").DataTable({
+            paging: false,
+            info:false,
+            searching: false,
+            ordering: false,
+            language: {
+                emptyTable: "Sin articulos"
+            }, columnDefs: [
+                { targets: 5, render: function () { return "<button class='btn btn-sm btn-warning'>Remover</button>"; } },
+                { targets: [3, 4], render: function (data) { return "C$ " + data; }}
+
+            ]
+        });
+    });
+</script>
+    <!-- Script para el detalle-->
+<script>
+    var tableProductos = null;
+    var articuloSeleccion = null;
+
+    $(document).ready(function () {
+        clearComponents();
+        // Generar la tabla de los productos
+        tableProductos = $("#tableProductos").DataTable({
+            ordering: false,
+            lengthMenu:[5],
+            info: false,
+            bLengthChange: false,
+            ajax: {
+                url:'@Url.Action("getArticulos", "Articulos")',
+                dataType: "JSON",
+                type: "POST"
+            }, columns: [
+                { 'data': 'Codigo' },
+                { 'data': 'Descripcion' },
+                { 'data': 'Precio' },
+                {
+                    'data': 'Id', 'render': function (data) {
+                        return "<button class='btn btn-sm bg-primary' style='color:white'>Seleccionar</button>";
+                    }
+                }
+            ], columnDefs: [
+                {
+                    targets : [0,1,2,3], className:  "dt-center"
+                }
+            ], language: {
+                "search": "Buscar articulos",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next":"Siguiente",
+                    "previous":"Anterior"
+                }
+            }
+        });
+
+        /* Agregar evento de escucha al tableArticulos */
+        $("#tableProductos tbody").on("click", "button", function () {
+            // Obtener el valor de la seleccion
+            articuloSeleccion = tableProductos.row($(this).parents('tr')).data();
+            // setear los valores
+            $("#CodigoArticulo").val(articuloSeleccion.Codigo);
+            $("#CantidadArticulo").val('1');
+            $("#PrecioArticulo").val(articuloSeleccion.Precio);
+            $("#CantidadArticulo").focus();
+            // Cerrar el modal
+            $("#modal-default .close").click();
+        });
+        /* Agregar evento de escucha al seleccionar */
+        $("#btnAgregar").click(function () {
+            if (articuloSeleccion && $("#CantidadArticulo").val() > 0)
+            {
+                let subTotal = parseInt($("#CantidadArticulo").val()) * $("#PrecioArticulo").val();
+                // Agregar a la seleccion
+                dataTableSeleccion.row.add([articuloSeleccion.Codigo, articuloSeleccion.Descripcion, $("#CantidadArticulo").val(), $("#PrecioArticulo").val(), subTotal, articuloSeleccion.Id]).draw(false);
+                // Eliminamos la seleccion anterior
+                clearComponents();
+                calcularMontoTotal();
+            } else {
+                $.notify({
+                    // Opciones
+                    message: "Seleccione un articulo",
+                    allow_dismiss: true
+                },
+           {
+               // Ajustes
+               type: "danger",
+               allow_dismiss: true,
+               placement: {
+                   from: "top",
+                   align: "center"
+               },
+           });
+            }
+        });
+    });
+    function clearComponents() {
+        $("#CodigoArticulo").val('');
+        $("#CantidadArticulo").val('');
+        $("#PrecioArticulo").val('');
+        $("#btnAgregar").focus();
+        $("#MontoTotal").val('0');
+    }
+    function calcularMontoTotal() {
+        var data = dataTableSeleccion.rows().data();
+        var suma = 0, total = 0;
+        data.each(function (value, index) {
+            total += parseInt(value[2]);// Total de articulos
+            suma += parseFloat(value[4]);// Monto total del credito
+        });
+        $("#MontoTotal").val(suma);
+    }
+
+    function getDetalle() {
+        let detalle = [];
+        let datos = dataTableSeleccion.data();
+        datos.each(function (value, index) {
+            item = {};
+            item["Id"] = 0;
+            item["Cantidad"] = value[2];
+            item["ArticuloId"] = value[5];
+            item["CreditoId"] = 0;
+            detalle.push(item);
+        });
+        return  JSON.stringify(detalle);
+    }
+    function SubmitForm() {
+        $.validator.unobtrusive.parse($("#FormCreditos"));
+        if ($($("#FormCreditos")).valid() && dataTableSeleccion.data().length > 0) {
+            $.ajax({
+                url: $("#FormCreditos")[0].action,
+                type: "POST",
+                data: $("#FormCreditos").serialize() + "&DetalleCredito="+getDetalle(),
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.success)
+                    { window.location.href = "/Creditos/index"; }
+                    else {
+                        alert("No se logro guardar uwu");
+                    }
+                }, error: function (data) {
+                    alert(data);
+                }
+            });
+        } else {
+            alert("Error");
+        }
+    }
+
     </script>
+<style>
+        table.dataTable tbody th, table.dataTable tbody td {
+	padding: 8px !important;
+}
+        table.dataTable thead th, table.dataTable thead td {
+	padding: 10px 18px !important;
+}
+    </style>
 }

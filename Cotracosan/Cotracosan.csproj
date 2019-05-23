@@ -92,8 +92,24 @@
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ReportViewerForMvc, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReportViewerForMvc.1.1.1\lib\net45\ReportViewerForMvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -176,6 +192,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\Reportes\ReportsController.cs" />
     <Compile Include="Controllers\Seguridad\AccountController.cs" />
     <Compile Include="Controllers\Catalogos\ArticulosController.cs" />
     <Compile Include="Controllers\Catalogos\ConductoresController.cs" />
@@ -190,6 +207,11 @@
     <Compile Include="Controllers\Operaciones\CarrerasController.cs" />
     <Compile Include="Controllers\Operaciones\CreditosController.cs" />
     <Compile Include="Controllers\Seguridad\RolesController.cs" />
+    <Compile Include="cotracosanWebDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>cotracosanWebDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="WebServices\AccountService.asmx.cs">
       <DependentUpon>AccountService.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -251,6 +273,7 @@
     <Content Include="Content\select2\select2.min.css" />
     <Content Include="Content\Tema\style.css" />
     <Content Include="Content\Tema\vendors\base\vendor.bundle.base.css" />
+    <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\cotracosan\Creditos.js" />
     <Content Include="Scripts\Tema\hoverable-collapse.js" />
     <Content Include="Scripts\Tema\off-canvas.js" />
@@ -432,6 +455,17 @@
     <Content Include="Content\fonts\Roboto\Roboto-Regular.ttf" />
     <Content Include="Content\fonts\Roboto\Roboto-Regular.woff" />
     <Content Include="Content\fonts\Roboto\Roboto-Regular.woff2" />
+    <Content Include="cotracosanWebDataSet.xsc">
+      <DependentUpon>cotracosanWebDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="cotracosanWebDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>cotracosanWebDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="cotracosanWebDataSet.xss">
+      <DependentUpon>cotracosanWebDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -555,6 +589,8 @@
     <Content Include="Views\Shared\_navbar.cshtml" />
     <Content Include="Views\Carreras\Resumen.cshtml" />
     <Content Include="Views\Creditos\DetalleAbonos.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Reports\GetReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -573,6 +609,7 @@
     <EmbeddedResource Include="Migrations\201905060448118_EliminacionLogica.resx">
       <DependentUpon>201905060448118_EliminacionLogica.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\Articulos.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

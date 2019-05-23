@@ -21,6 +21,7 @@ namespace Cotracosan.Controllers.Catalogos
 
         // POST: Json List
         [HttpPost]
+        [AllowAnonymous]
         public async Task<JsonResult> getConductores()
         {
             var list = await db.Conductores.ToListAsync();
@@ -39,12 +40,14 @@ namespace Cotracosan.Controllers.Catalogos
             return Json(new { data = result }, JsonRequestBehavior.AllowGet);
         }
         // GET: Conductores
+        [Authorize(Roles ="Contador,Administrador")]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: Conductores/Details/5
+        [Authorize(Roles = "Contador,Administrador")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -60,6 +63,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Conductores/Create
+        [Authorize(Roles = "Contador")]
         public ActionResult Create()
         {
             return View();

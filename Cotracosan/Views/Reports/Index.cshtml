@@ -1,0 +1,60 @@
+﻿@using ReportViewerForMvc;
+@{
+    ViewBag.Title = "Reportes";
+}
+
+<h2>Reportes de Catalogos</h2>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <label class="control-label col-md-3">Seleccione un Catalogo</label>
+            <div class="col-md-4">
+                <select class="form-control" id="Catalogo" name="Catalogo">
+                    <option value="Articulos">Articulos</option>
+                    <option value="Socios">Socios</option>
+                    <option value="Conductores">Conductores</option>
+                    <option value="Turnos">Turnos</option>
+                    <option value="Vehiculos">Vehiculos</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-sm btn-success">Consultar</button>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-md-10 offset-1">
+        <div id="ReportSection">
+            
+        </div>
+    </div>
+</div>
+@section Scripts{        
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        function CargarReporte(){
+            $.ajax("/Reports/GetReport",
+            {
+                type: "GET",
+                data: {"Catalogo": "Articulos"},
+            }).done(function (data) {
+                $("#ReportSection").html(data);
+            });
+        }
+    </script>
+}<style>
+    iframe {
+        height: 100%;
+        width: 100%;
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+</style>

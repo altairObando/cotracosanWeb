@@ -20,6 +20,7 @@ namespace Cotracosan.Controllers.Catalogos
         private bool completado = false;
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<JsonResult> getArticulos()
         {
             var lista = await db.Articulos.ToListAsync();
@@ -41,6 +42,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Details/5
+        [Authorize(Roles ="Contador,Administrador")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -56,6 +58,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Create
+        [Authorize(Roles = "Administrador")]
         public ActionResult Create()
         {
             return View();
@@ -80,6 +83,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Edit/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,6 +117,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

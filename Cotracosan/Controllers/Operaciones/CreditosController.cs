@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Cotracosan.Models.Cotracosan;
+using Newtonsoft.Json;
 
 namespace Cotracosan.Controllers.Operaciones
 {
@@ -68,7 +69,7 @@ namespace Cotracosan.Controllers.Operaciones
         public ActionResult Create()
         {
             ViewBag.CodigoCredito = GenerarCodigoCredito();
-            ViewBag.VehiculoId = new SelectList(db.Vehiculos, "Id", "Placa");
+            ViewBag.VehiculoId = new SelectList(db.Vehiculos.Where(x => x.Estado), "Id", "Placa");
             return View();
         }
 
@@ -84,18 +85,42 @@ namespace Cotracosan.Controllers.Operaciones
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,CodigoCredito,FechaDeCredito,MontoTotal,EstadoDeCredito,CreditoAnulado,VehiculoId")] Creditos creditos)
+        public async Task<ActionResult> Create([Bind(Include = "Id,CodigoCredito,FechaDeCredito,MontoTotal,EstadoDeCredito,CreditoAnulado,VehiculoId")] Creditos creditos, string DetalleCredito)
         {
+            bool gCredito = false; // se ha guardado el credito ? 
+            bool gDetalle = false; // se ha guardado el detalle ? 
+            List<DetallesDeCreditos> detalle = JsonConvert.DeserializeObject<List<DetallesDeCreditos>>(DetalleCredito);
+            if (detalle.Count < 1)
+                ModelState.AddModelError("Detalle de Credito", "No se ha agregado ningun detalle al credito actual ó no se ha logrado deserializar el contenido");
+
             if (ModelState.IsValid)
             {
-                creditos.EstadoDeCredito = true;
-                db.Creditos.Add(creditos);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                using (var transact = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        creditos.EstadoDeCredito = true;
+                        db.Creditos.Add(creditos);
+                        gCredito  = await db.SaveChangesAsync() > 0;
+                        if (gCredito)
+                        {
+                            detalle.ForEach(x => x.CreditoId = creditos.Id);
+                            db.DetallesDeCreditos.AddRange(detalle);
+                            gDetalle = await db.SaveChangesAsync() > 0;
+                            // Guardamos la transaccion solo si se guardo el detalle
+                            transact.Commit();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        transact.Rollback();
+                    }
+                }
             }
-            ViewBag.CodigoCredito = GenerarCodigoCredito();
-            ViewBag.VehiculoId = new SelectList(db.Vehiculos, "Id", "Placa", creditos.VehiculoId);
-            return View(creditos);
+            string mensaje = gCredito && gDetalle ? "Credito Guardado Correctamente" :
+                gCredito && !gDetalle ? "No se ha logrado guardar los articulos del credito" :
+                !gCredito && gDetalle ? "No se ha podido guardar el credito" : "Error en la validacion del modelo de datos";
+            return Json(new { success = gCredito && gDetalle, message = mensaje });
         }
 
         // GET: Creditos/Edit/5
