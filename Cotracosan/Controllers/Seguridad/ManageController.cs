@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Cotracosan.Models;
+using System.IO;
 
 namespace Cotracosan.Controllers
 {
@@ -134,20 +135,55 @@ namespace Cotracosan.Controllers
         {
             // Obtener la imagen actual del usuario
             var user = UserManager.FindById(User.Identity.GetUserId());
-            ViewBag.currentImage = user.ImagenPerfil;
+            ViewBag.CurrentImage = user.ImagenPerfil != null ? user.ImagenPerfil : "";
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AgregarImagen(AddImageViewModel model)
         {
+            var validImageTypes = new string[]
+                {
+                    //"image/gif",
+                    "image/jpeg",
+                    "image/pjpeg",
+                    "image/png"
+                };
+            if (model.ImageRoute == null || model.ImageRoute.ContentLength == 0)
+                ModelState.AddModelError("ImagerRoute", "Este campo es requerido");
+            else if (!validImageTypes.Contains(model.ImageRoute.ContentType))
+                ModelState.AddModelError("ImageRoute", "La imagen no esta en uno de los formatos admitidos");
+
             if (ModelState.IsValid)
             {
                 // Creamos la ruta para almacenar la imagen.
+                if(model.ImageRoute != null && model.ImageRoute.ContentLength > 0)
+                {
+                    var uploadDir = "/Users/" + User.Identity.GetUserName();
+                    // Comprobar si el directorio existe, de lo contrario crearlo
+                    if(!System.IO.Directory.Exists(Server.MapPath(uploadDir)))
+                    {
+                        System.IO.Directory.CreateDirectory(uploadDir);
+                    }
 
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                user.ImagenPerfil = model.ImageRoute;
-                var actualizado = await UserManager.UpdateAsync(user);
-                ViewBag.StatusMessage = actualizado.Succeeded ? "Imagen de perfil actualizada" : "Error durante la actualización";
+                    var imagePath = Path.Combine(Server.MapPath(uploadDir), "profile_picture." +model.ImageRoute.FileName.Split('.').Last());
+                    var imageUrl = Path.Combine(uploadDir, "profile_picture." + model.ImageRoute.FileName.Split('.').Last());
+                    // limpiamos cualquier imagen o archivo dentro de la carpeta 
+                    var imagenes = Directory.GetFiles(Server.MapPath(uploadDir));
+                    foreach (string imgurl in imagenes)
+                    {
+                        if(imgurl.Contains("profile_picture"))
+                            System.IO.File.Delete(imgurl);
+                    }
+                    // almacenamos la imagen
+                    model.ImageRoute.SaveAs(imagePath);
+
+                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    user.ImagenPerfil = imageUrl;
+                    var actualizado = await UserManager.UpdateAsync(user);
+                    ViewBag.StatusMessage = actualizado.Succeeded ? "Imagen de perfil actualizada" : "Error durante la actualización";
+                    return Redirect("Index");
+                }                
             }
             return View(model);
         }

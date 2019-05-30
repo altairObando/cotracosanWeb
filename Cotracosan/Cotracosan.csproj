@@ -619,7 +619,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="fonts\" />
-    <Folder Include="users\" />
+    <Folder Include="Users\altair\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

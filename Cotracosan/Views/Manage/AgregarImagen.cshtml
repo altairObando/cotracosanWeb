@@ -1,24 +1,52 @@
 ﻿@model Cotracosan.Models.AddImageViewModel
 @{
     ViewBag.Title = "Agregar Imagen";
+    if(string.IsNullOrWhiteSpace(ViewBag.CurrentImage))
+    {
+        ViewBag.CurrentImage = "~/Content/images/emptyUser.png";
+    }
 }
-<h2>Agregar nueva Imagen</h2>
-@using (Html.BeginForm("AgregarImagen", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        @Html.LabelFor(m => m.ImageRoute)
-        <div class="col-md-10">
-            @Html.EditorFor(m => m.ImageRoute)
-        </div>
-    </div>
+<h2>Actualizar imagen de perfil</h2>
 
-    <div class="form-group">
-        <div class="offset-2 col-md-10">
-            <input type="submit" class="btn btn-success" value="Actualizar Imagen" />
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="card text-center">
+            <img id="VistaPrevia" src="@ViewBag.CurrentImage" class="rounded mx-auto d-block img-thumbnail" alt="@User.Identity.Name Imagen perfil"  width="200px"/>
+            <div class="card-body">
+                @using (Html.BeginForm("AgregarImagen", "Manage", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ImageRoute, "Seleccione una imagen")
+                        <div class="col-md-10">
+                            <input name="@Html.NameFor(m =>m.ImageRoute)" id="@Html.IdFor(m => m.ImageRoute)" type="file" accept="image/x-png,image/gif,image/jpeg,image/jpeg"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="offset-2 col-md-10">
+                            <input type="submit" class="btn btn-success" value="Actualizar Imagen" />
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     </div>
-}
+</div>
+
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
+<script>
+    $("#ImageRoute").change(function () {
+        if (this.files && this.files[0]) {
+            var imageDir = new FileReader();
+            imageDir.onload = function (e) {
+                $('#VistaPrevia').attr('src', e.target.result);
+                $("#loginImage").attr('src', e.target.result);
+            }
+            imageDir.readAsDataURL(this.files[0]);
+        }
+    });
+</script>
 }

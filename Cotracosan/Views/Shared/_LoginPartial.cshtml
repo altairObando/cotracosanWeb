@@ -1,4 +1,10 @@
 ﻿@using Microsoft.AspNet.Identity
+@using Cotracosan.Models
+@{
+    var user = User.Identity.GetUserId();
+    var db = new ApplicationDbContext();
+    string imgUrl = db.Users.Find(user).ImagenPerfil;
+}
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
@@ -7,7 +13,7 @@
     }
     <li class="nav-item nav-profile dropdown">
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-            <img src="~/Content/images/face20.jpg" alt="profile" />
+            <img src="@imgUrl" alt="profile" id="loginImage" class="rounded img-fluid"/>
             <span class="nav-profile-name">@User.Identity.GetUserName()</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">

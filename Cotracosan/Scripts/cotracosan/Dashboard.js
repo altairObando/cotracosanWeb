@@ -165,7 +165,7 @@ var datos = [];
 $(function () {
     $.getJSON("/Home/GetTimeSeries", function (data) {
         // Agregando las fechas al arreglo de etiquetas
-        for(var i = 0; i < data.etiquetas.length; i++)
+        for(var i = 0; i < data.data.length; i++)
         { 
             etiquetaFechas.push(data.data[i].FechaDia);
             // creando el dataset.

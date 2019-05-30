@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace Cotracosan.Models
 {
     public class AddImageViewModel
     {
-        [Required]
-        [DataType(DataType.ImageUrl)]
-        public string ImageRoute { get; set; }
+        [Display(Name ="Seleccione una imagen")]
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase ImageRoute { get; set; }
     }
     public class ForgotViewModel
     {
