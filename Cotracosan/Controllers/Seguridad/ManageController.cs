@@ -130,6 +130,28 @@ namespace Cotracosan.Controllers
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
         }
 
+        public ActionResult AgregarImagen()
+        {
+            // Obtener la imagen actual del usuario
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            ViewBag.currentImage = user.ImagenPerfil;
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> AgregarImagen(AddImageViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Creamos la ruta para almacenar la imagen.
+
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                user.ImagenPerfil = model.ImageRoute;
+                var actualizado = await UserManager.UpdateAsync(user);
+                ViewBag.StatusMessage = actualizado.Succeeded ? "Imagen de perfil actualizada" : "Error durante la actualización";
+            }
+            return View(model);
+        }
+
         //
         // POST: /Manage/EnableTwoFactorAuthentication
         [HttpPost]

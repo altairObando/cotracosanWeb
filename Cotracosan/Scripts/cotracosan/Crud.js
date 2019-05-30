@@ -71,6 +71,7 @@ function generarDataTable(dataUrl, indexId, tableId, columnDefs, actionsUri) {
             "type": "POST",
             "dataType": "JSON"
         }, "columns": columnas,
+        
         "columnDefs": [
         {
             "targets": indexId, "render": function (data) {

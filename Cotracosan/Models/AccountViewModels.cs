@@ -3,7 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cotracosan.Models
 {
-
+    public class AddImageViewModel
+    {
+        [Required]
+        [DataType(DataType.ImageUrl)]
+        public string ImageRoute { get; set; }
+    }
     public class ForgotViewModel
     {
         [Required]

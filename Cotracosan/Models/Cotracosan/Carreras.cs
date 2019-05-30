@@ -5,6 +5,7 @@ namespace Cotracosan.Models.Cotracosan
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Globalization;
 
     public partial class Carreras
     {
@@ -45,5 +46,13 @@ namespace Cotracosan.Models.Cotracosan
         public virtual Turnos Turnos { get; set; }
 
         public virtual Vehiculos Vehiculos { get; set; }
+        [NotMapped]
+        public string NombreMes
+        {
+            get
+            {
+                return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(FechaDeCarrera.Month);
+            }
+        }
     }
 }

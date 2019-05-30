@@ -5,6 +5,7 @@ namespace Cotracosan.Models.Cotracosan
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Globalization;
 
     public partial class Abonos
     {
@@ -24,5 +25,14 @@ namespace Cotracosan.Models.Cotracosan
         public bool Estado { get; set; }
 
         public virtual Creditos Creditos { get; set; }
+
+        [NotMapped]
+        public string NombreMes
+        {
+            get
+            {
+                return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(FechaDeAbono.Month);
+            }
+        }
     }
 }

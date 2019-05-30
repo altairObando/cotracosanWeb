@@ -6,6 +6,7 @@ namespace Cotracosan.Models.Cotracosan
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using System.Data.Entity.Spatial;
+    using System.Globalization;
 
     public partial class Creditos
     {
@@ -52,6 +53,15 @@ namespace Cotracosan.Models.Cotracosan
             get
             {
                 return Abonos.Where(y => y.Estado).Sum(x => x.MontoDeAbono) >= MontoTotal;
+            }
+        }
+
+        [NotMapped]
+        public string NombreMes
+        {
+            get
+            {
+                return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(FechaDeCredito.Month);
             }
         }
     }

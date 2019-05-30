@@ -9,6 +9,9 @@ namespace Cotracosan.Models
     // Puede agregar datos del perfil del usuario agregando más propiedades a la clase ApplicationUser. Para más información, visite http://go.microsoft.com/fwlink/?LinkID=317594.
     public class ApplicationUser : IdentityUser
     {
+        // Contiene la ruta donde se encuentra la imagen de los usuarios
+        // las imagenes se guardaran en la carpeta users/{nombreusuario}/imagen.png|.jpg
+        public string ImagenPerfil { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Tenga en cuenta que el valor de authenticationType debe coincidir con el definido en CookieAuthenticationOptions.AuthenticationType

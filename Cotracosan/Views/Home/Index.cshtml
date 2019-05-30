@@ -1,31 +1,131 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Dashboard";
+}
+@if (Request.IsAuthenticated)
+{
+    <!--Section con informacion reciente de los movimientos -->
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body dashboard-tabs p-0">
+                    <!-- Titulos para las etiquetas -->
+                    <ul class="nav nav-tabs px-4" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="carreras-tab" data-toggle="tab" href="#carreras" role="tab" aria-controls="carreras" aria-selected="true">Carreras</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="creditos-tab" data-toggle="tab" href="#creditos" role="tab" aria-controls="creditos" aria-selected="false">Creditos</a>
+                        </li>
+                    </ul>
+                    <!-- Contenido -->
+                    <div class="tab-content py-0 px-0">
+                        <!-- Panel para las carreras-->
+                        <div class="tab-pane fade show active" id="carreras" role="tabpanel" aria-labelledby="carreras-tab">
+                            <div class="d-flex flex-wrap justify-content-xl-between">
+                                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                                    <i class="mdi mdi-fridge-filled-top  mr-3 icon-lg text-danger"></i>
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <small class="mb-1 text-muted">Vehiculo Con Carreras</small>
+                                        <h5 class="mr-2 mb-0" id="placa1"> --- </h5>
+                                    </div>
+                                </div>
+                                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                                    <i class="mdi mdi-map-marker-radius mr-3 icon-lg text-warning"></i>
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <small class="mb-1 text-muted">Total Carreras</small>
+                                        <h5 class="mr-2 mb-0" id="totalCarreras">0</h5>
+                                    </div>
+                                </div>
+                                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                                    <i class="mdi mdi-fridge-filled-top  mr-3 icon-lg text-success"></i>
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <small class="mb-1 text-muted">Vehiculo Con mas Recaudaciones</small>
+                                        <h5 class="mr-2 mb-0" id="placa2"> ---</h5>
+                                    </div>
+                                </div>
+                                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                                    <i class="mdi mdi-currency-usd mr-3 icon-lg text-success"></i>
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <small class="mb-1 text-muted">Total Recaudado</small>
+                                        <h5 class="mr-2 mb-0" id="totalRecaudado">C$ 0</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin del panel para las carreras-->
+                        <!-- Panel de los creditos -->
+                        <div class="tab-pane fade" id="creditos" role="tabpanel" aria-labelledby="creditos-tab">
+                            <div class="d-flex flex-wrap justify-content-xl-between">
+                                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                                    <i class="mdi mdi-cart mr-3 icon-lg text-success"></i>
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <small class="mb-1 text-muted">Articulo mas buscado</small>
+                                        <h5 class="mr-2 mb-0" id="nombreArticulo1"> --- </h5>
+                                    </div>
+                                </div>
+                                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                                    <i class="mdi mdi-cash-multiple mr-3 icon-lg text-success"></i>
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <small class="mb-1 text-muted">Total acreditado</small>
+                                        <h5 class="mr-2 mb-0" id="totalAcreditado1">C$ 0</h5>
+                                    </div>
+                                </div>
+                                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                                    <i class="mdi mdi-cart-off mr-3 icon-lg text-danger"></i>
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <small class="mb-1 text-muted">articulo menos solicitado</small>
+                                        <h5 class="mr-2 mb-0" id="nombreArticulo2"> --- </h5>
+                                    </div>
+                                </div>
+                                <div class="d-flex border-md-right flex-grow-1 align-items-center justify-content-center p-3 item">
+                                    <i class="mdi mdi-cash-multiple mr-3 icon-lg text-danger"></i>
+                                    <div class="d-flex flex-column justify-content-around">
+                                        <small class="mb-1 text-muted">Total acreditado</small>
+                                        <h5 class="mr-2 mb-0" id="totalAcreditado2">C$ 0</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin del panel de los creditos-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Section para el grafico de Ingresos y egresos -->
+    <div class="row">
+        <div class="col-md-10 grid-margin stretch-card offset-sm-1">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title">Ingresos y Egresos</p>
+                    <p class="mb-4">Historico mensual en miles de cordobas.</p>
+                    <div id="graficos-ingresos-egresos-legend" class="d-flex justify-content-center pt-3"></div>
+                    <canvas id="graficos-ingresos-egresos"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin del grafico-->
+    <hr />
+    <!-- Segundo grafico-->
+    <div class="row">
+         <div class="col-md-10 grid-margin stretch-card offset-1">
+             <div class="card">
+                 <div class="card-body">
+                     <p class="card-title">Hístorico de Carreras</p>
+                     <p class="mb-4" id="subtitulo"></p>
+                     <div id="grafico-time-series-legend" class="d-flex justify-content-center pt-3"></div>
+                     <canvas id="grafico-time-series"></canvas>
+                 </div>
+             </div>
+         </div>
+    </div>
+    <!-- Fin del segundo grafico-->
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+@section Scripts{   
+    
+<script src="~/Scripts/Tema/vendors/chart.js/Chart.min.js"></script>
+<script src="~/Scripts/cotracosan/Dashboard.js"></script>
+    
+}
