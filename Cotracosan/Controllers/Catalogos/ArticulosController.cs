@@ -11,7 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Catalogos
 {
-    [Authorize]
+    [Authorize(Roles = "Contador,Administrador")]
     public class ArticulosController : Controller
     {
         private Context db = new Context();
@@ -42,7 +42,6 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Details/5
-        [Authorize(Roles ="Contador,Administrador")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -58,7 +57,6 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Create
-        [Authorize(Roles = "Administrador")]
         public ActionResult Create()
         {
             return View();
@@ -83,7 +81,6 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Edit/5
-        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -117,7 +114,6 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Delete/5
-        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

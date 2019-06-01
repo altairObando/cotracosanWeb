@@ -11,7 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Catalogos
 {
-    [Authorize]
+    [Authorize(Roles = "Contador,Administrador")]
     public class ConductoresController : Controller
     {
         private Context db = new Context();
@@ -40,14 +40,12 @@ namespace Cotracosan.Controllers.Catalogos
             return Json(new { data = result }, JsonRequestBehavior.AllowGet);
         }
         // GET: Conductores
-        [Authorize(Roles ="Contador,Administrador")]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: Conductores/Details/5
-        [Authorize(Roles = "Contador,Administrador")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -63,7 +61,6 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Conductores/Create
-        [Authorize(Roles = "Contador")]
         public ActionResult Create()
         {
             return View();
@@ -119,6 +116,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Conductores/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

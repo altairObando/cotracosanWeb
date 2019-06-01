@@ -11,7 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Catalogos
 {
-    [Authorize]
+    [Authorize(Roles = "Contador,Administrador")]
     public class VehiculosController : Controller
     {
         private Context db = new Context();
@@ -19,6 +19,7 @@ namespace Cotracosan.Controllers.Catalogos
         private string tipoNotificacion = "danger";
         private bool completado = false;
         // POST Vehiculos/getVehiculos
+        [AllowAnonymous]
         public async Task<JsonResult> getVehiculos()
         {
             var vehiculos = await db.Vehiculos.Include(v => v.Socios).ToListAsync();
@@ -115,6 +116,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Vehiculos/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

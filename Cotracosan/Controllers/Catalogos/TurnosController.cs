@@ -11,7 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Catalogos
 {
-    [Authorize]
+    [Authorize(Roles = "Contador,Administrador")]
     public class TurnosController : Controller
     {
         private Context db = new Context();
@@ -20,6 +20,7 @@ namespace Cotracosan.Controllers.Catalogos
         private bool completado = false;
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<JsonResult> getTurnos()
         {
             var list = await db.Turnos.ToListAsync();
@@ -110,6 +111,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Turnos/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

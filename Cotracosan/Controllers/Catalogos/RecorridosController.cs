@@ -11,7 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Catalogos
 {
-    [Authorize]
+    [Authorize(Roles = "Contador,Administrador")]
     public class RecorridosController : Controller
     {
         private Context db = new Context();
@@ -20,6 +20,7 @@ namespace Cotracosan.Controllers.Catalogos
         private bool completado = false;
         // POST: Recorridos/getRecorridos
         [HttpPost]
+        [AllowAnonymous]
         public async Task<JsonResult> getRecorridos()
         {
             var lista = await db.LugaresFinalesDelosRecorridos.ToListAsync();
@@ -112,6 +113,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Recorridos/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,7 +129,6 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // POST: Recorridos/Delete/5
-        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

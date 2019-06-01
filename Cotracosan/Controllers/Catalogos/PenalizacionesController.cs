@@ -11,7 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Catalogos
 {
-    [Authorize]
+    [Authorize(Roles ="Contador,Administrador")]
     public class PenalizacionesController : Controller
     {
         private Context db = new Context();
@@ -20,6 +20,7 @@ namespace Cotracosan.Controllers.Catalogos
         private bool completado = false;
         // POST: getPenalizaciones
         [HttpPost]
+        [AllowAnonymous]
         public async Task<JsonResult> getPenalizaciones()
         {
             var lista = await db.Penalizaciones.ToListAsync();
