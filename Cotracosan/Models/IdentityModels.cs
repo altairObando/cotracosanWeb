@@ -11,7 +11,7 @@ namespace Cotracosan.Models
     {
         // Contiene la ruta donde se encuentra la imagen de los usuarios
         // las imagenes se guardaran en la carpeta users/{nombreusuario}/imagen.png|.jpg
-        public string ImagenPerfil { get; set; }
+        public byte[] ImagenPerfil { get; set; }
         public string SocioId { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

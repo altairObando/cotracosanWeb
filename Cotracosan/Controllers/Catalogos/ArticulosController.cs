@@ -11,7 +11,7 @@ using Cotracosan.Models.Cotracosan;
 
 namespace Cotracosan.Controllers.Catalogos
 {
-    [Authorize(Roles = "Contador,Administrador")]
+    [Authorize(Roles = "Contador, Administrador")]
     public class ArticulosController : Controller
     {
         private Context db = new Context();
@@ -114,6 +114,7 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

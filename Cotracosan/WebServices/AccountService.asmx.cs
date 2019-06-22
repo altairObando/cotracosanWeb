@@ -23,7 +23,7 @@ namespace Cotracosan.Controllers.WebServices
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // Para permitir que se llame a este servicio web desde un script, usando ASP.NET AJAX, quite la marca de comentario de la línea siguiente. 
-    // [System.Web.Script.Services.ScriptService]
+    [System.Web.Script.Services.ScriptService]
     public class AccountService : System.Web.Services.WebService
     {
         private ApplicationDbContext db;
@@ -64,11 +64,7 @@ namespace Cotracosan.Controllers.WebServices
                 _userManager = value;
             }
         }
-        [WebMethod]
-        public string HelloWorld()
-        {
-            return "Hola a todos";
-        }
+
         [WebMethod]
         public bool Login(string Usuario, string Contrasenia)
         {

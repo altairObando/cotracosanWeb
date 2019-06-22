@@ -489,6 +489,7 @@
     <Content Include="cotracosanWebDataSet.xss">
       <DependentUpon>cotracosanWebDataSet.xsd</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\somee.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -517,7 +518,9 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -619,6 +622,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Tema\fonts\" />
+    <Folder Include="Content\UserImages\" />
     <Folder Include="Users\altair\" />
   </ItemGroup>
   <ItemGroup>

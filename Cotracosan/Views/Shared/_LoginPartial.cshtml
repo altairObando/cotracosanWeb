@@ -1,9 +1,19 @@
 ﻿@using Microsoft.AspNet.Identity
 @using Cotracosan.Models
 @{
-    var user = User.Identity.GetUserId();
+    string user = User.Identity.GetUserId();
     var db = new ApplicationDbContext();
-    string imgUrl = db.Users.Find(user).ImagenPerfil;
+    string imgUrl = "/Content/images/emptyUser.png";
+    // Comprobando que se encuentre algun usuario conectado
+    if (!string.IsNullOrEmpty(user))
+    {
+        // Buscamos al usuario
+        var usuario = db.Users.Find(user);
+        if (usuario.ImagenPerfil.Length > 0)
+        {
+            imgUrl = string.Format("data:image/jpg; base64, {0}", Convert.ToBase64String(usuario.ImagenPerfil));
+        }
+    }
 }
 @if (Request.IsAuthenticated)
 {

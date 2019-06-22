@@ -112,17 +112,17 @@ namespace Cotracosan.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Username, Email = model.Email, ImagenPerfil = new byte[0] };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
+                    await UserManager.AddToRoleAsync(user.Id, model.Rol);
+                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);                    
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
-
             // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
             ViewBag.Rol = new SelectList(db.Roles, "Name", "Name");
             return View(model);

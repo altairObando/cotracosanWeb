@@ -57,7 +57,10 @@ function getHtmlData(uri) {
         url: uri,
         success: function (data) {
             $("#parcialCreateUpdate").html(data);
+            console.log(data);
         }
+    }).fail(function (response) {
+        console.log(response);
     });
 }
 function generarDataTable(dataUrl, indexId, tableId, columnDefs, actionsUri) {

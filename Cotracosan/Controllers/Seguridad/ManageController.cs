@@ -135,7 +135,11 @@ namespace Cotracosan.Controllers
         {
             // Obtener la imagen actual del usuario
             var user = UserManager.FindById(User.Identity.GetUserId());
-            ViewBag.CurrentImage = user.ImagenPerfil != null ? user.ImagenPerfil : "";
+
+            ViewBag.CurrentImage = user.ImagenPerfil.Length > 0 ?
+                string.Format("data:image/jpg; base64, {0}", Convert.ToBase64String(user.ImagenPerfil))
+            : null;
+
             return View();
         }
         [HttpPost]
@@ -144,47 +148,31 @@ namespace Cotracosan.Controllers
         {
             var validImageTypes = new string[]
                 {
-                    //"image/gif",
+                    "image/gif",
                     "image/jpeg",
                     "image/pjpeg",
                     "image/png"
                 };
             if (model.ImageRoute == null || model.ImageRoute.ContentLength == 0)
-                ModelState.AddModelError("ImagerRoute", "Este campo es requerido");
+                ModelState.AddModelError("ImageRoute", "Este campo es requerido");
             else if (!validImageTypes.Contains(model.ImageRoute.ContentType))
                 ModelState.AddModelError("ImageRoute", "La imagen no esta en uno de los formatos admitidos");
 
             if (ModelState.IsValid)
             {
+                // usuario qu sera actualizado
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 // Creamos la ruta para almacenar la imagen.
-                if(model.ImageRoute != null && model.ImageRoute.ContentLength > 0)
+                if (model.ImageRoute != null && model.ImageRoute.ContentLength > 0)
                 {
-                    var uploadDir = "/Users/" + User.Identity.GetUserName();
-                    // Comprobar si el directorio existe, de lo contrario crearlo
-                    if(!System.IO.Directory.Exists(Server.MapPath(uploadDir)))
-                    {
-                        System.IO.Directory.CreateDirectory(uploadDir);
-                    }
-
-                    var imagePath = Path.Combine(Server.MapPath(uploadDir), "profile_picture." +model.ImageRoute.FileName.Split('.').Last());
-                    var imageUrl = Path.Combine(uploadDir, "profile_picture." + model.ImageRoute.FileName.Split('.').Last());
-                    // limpiamos cualquier imagen o archivo dentro de la carpeta 
-                    var imagenes = Directory.GetFiles(Server.MapPath(uploadDir));
-                    foreach (string imgurl in imagenes)
-                    {
-                        if(imgurl.Contains("profile_picture"))
-                            System.IO.File.Delete(imgurl);
-                    }
-                    // almacenamos la imagen
-                    model.ImageRoute.SaveAs(imagePath);
-
-                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                    user.ImagenPerfil = imageUrl;
+                    user.ImagenPerfil = new byte[model.ImageRoute.ContentLength];
+                    model.ImageRoute.InputStream.Read(user.ImagenPerfil, 0, model.ImageRoute.ContentLength);
                     var actualizado = await UserManager.UpdateAsync(user);
                     ViewBag.StatusMessage = actualizado.Succeeded ? "Imagen de perfil actualizada" : "Error durante la actualización";
                     return Redirect("Index");
                 }                
             }
+            ViewBag.StatusMessage = "La Imagen no contiene los parametros necesarios para completar esta solicitud";
             return View(model);
         }
 
