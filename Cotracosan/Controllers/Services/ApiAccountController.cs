@@ -8,18 +8,18 @@ using System.Web.Mvc;
 
 namespace Cotracosan.Controllers.Services
 {
-    public class AccountController : Controller
+    public class ApiAccountController : Controller
     {
         #region Configuración
         private ApplicationDbContext db;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public AccountController()
+        public ApiAccountController()
         {
             db = new ApplicationDbContext();
         }
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ApiAccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;

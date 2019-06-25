@@ -136,9 +136,11 @@ namespace Cotracosan.Controllers
             // Obtener la imagen actual del usuario
             var user = UserManager.FindById(User.Identity.GetUserId());
 
-            ViewBag.CurrentImage = user.ImagenPerfil.Length > 0 ?
+            ViewBag.CurrentImage = user.ImagenPerfil != null ? 
+                user.ImagenPerfil.Length > 0 ?
                 string.Format("data:image/jpg; base64, {0}", Convert.ToBase64String(user.ImagenPerfil))
-            : null;
+                : null 
+                : null;
 
             return View();
         }

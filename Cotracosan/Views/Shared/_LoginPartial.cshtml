@@ -9,9 +9,12 @@
     {
         // Buscamos al usuario
         var usuario = db.Users.Find(user);
-        if (usuario.ImagenPerfil.Length > 0)
+        if(usuario.ImagenPerfil != null)
         {
-            imgUrl = string.Format("data:image/jpg; base64, {0}", Convert.ToBase64String(usuario.ImagenPerfil));
+            if (usuario.ImagenPerfil.Length > 0)
+            {
+                imgUrl = string.Format("data:image/jpg; base64, {0}", Convert.ToBase64String(usuario.ImagenPerfil));
+            }
         }
     }
 }
