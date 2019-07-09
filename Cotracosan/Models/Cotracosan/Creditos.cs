@@ -32,7 +32,7 @@ namespace Cotracosan.Models.Cotracosan
 
         [Required]
         [Display(Name = "Anulado")]
-        public string CreditoAnulado { get; set; }
+        public bool CreditoAnulado { get; set; }
         [Display(Name = "Vehiculo")]
         public int VehiculoId { get; set; }
 
@@ -43,6 +43,7 @@ namespace Cotracosan.Models.Cotracosan
         public virtual ICollection<DetallesDeCreditos> DetallesDeCreditos { get; set; }
 
         public virtual Vehiculos Vehiculos { get; set; }
+
         [NotMapped]
         public string InfoCredito { get {
                 return this.CodigoCredito + " " + Vehiculos.Placa + " " + string.Format("{0:C2}", MontoTotal);

@@ -64,5 +64,25 @@ namespace Cotracosan.Controllers.Services
                 );
             return Json( new { vehiculos = result }, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult getConsolidadoVehiculo(int id)
+        {
+            string fechaInicio = Request["fechaInicio"];
+            string fechaFin = Request["fechaFin"];
+            decimal totalCarreras = 0, totalCreditos = 0, totalAbonos = 0;
+            if(string.IsNullOrEmpty(fechaInicio)&& string.IsNullOrEmpty(fechaFin))
+            {
+                totalCarreras = db.Carreras.Where(x => x.FechaDeCarrera.Equals(DateTime.Now.Date) && !x.CarreraAnulada).Sum(a => a.MontoRecaudado);
+                totalCreditos = db.Creditos.Where(x => x.FechaDeCredito.Equals(DateTime.Now.Date) && !x.CreditoAnulado).Sum(a => a.MontoTotal);
+                totalAbonos = db.Abonos.Where(x => x.FechaDeAbono.Equals(DateTime.Now.Date) && !x.Estado).Sum(a => a.MontoDeAbono);
+            }else
+            {
+                totalCarreras = db.Carreras.Where(x => (x.FechaDeCarrera >= DateTime.Parse(fechaInicio) && x.FechaDeCarrera <= DateTime.Parse(fechaFin)) && !x.CarreraAnulada).Sum(a => a.MontoRecaudado);
+                totalCreditos = db.Creditos.Where(x => (x.FechaDeCredito >= DateTime.Parse(fechaInicio) && x.FechaDeCredito <= DateTime.Parse(fechaFin)) && !x.CreditoAnulado).Sum(a => a.MontoTotal);
+                totalAbonos = db.Abonos.Where(x => (x.FechaDeAbono >= DateTime.Parse(fechaInicio) && x.FechaDeAbono <= DateTime.Parse(fechaFin)) && !x.Estado).Sum(a => a.MontoDeAbono);
+            }
+            
+            return Json(new { carreras = totalCarreras, creditos = totalCreditos, abonos = totalAbonos}, JsonRequestBehavior.AllowGet);
+        }
     }
 }

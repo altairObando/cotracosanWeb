@@ -17,7 +17,7 @@ namespace Cotracosan.Controllers.Services
             var c = db.Carreras.ToList();
             // Proyectar para evitar referencias circulares
             var carreras = (from item in c
-                            where !item.CarreraAnulada orderby item.FechaDeCarrera descending
+                            where item.Estado orderby item.FechaDeCarrera descending
                             select new
                             {
                                 Id = item.Id,

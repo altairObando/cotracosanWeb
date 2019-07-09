@@ -208,6 +208,7 @@
     <Compile Include="Controllers\Operaciones\CreditosController.cs" />
     <Compile Include="Controllers\Seguridad\RolesController.cs" />
     <Compile Include="Controllers\Services\ApiAccountController.cs" />
+    <Compile Include="Controllers\Services\ApiCreditosController.cs" />
     <Compile Include="Controllers\Services\ApiCarrerasController.cs" />
     <Compile Include="Controllers\Services\ApiVehiculosController.cs" />
     <Compile Include="cotracosanWebDataSet.Designer.cs">
