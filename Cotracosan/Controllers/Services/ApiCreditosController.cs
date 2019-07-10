@@ -54,7 +54,9 @@ namespace Cotracosan.Controllers.Services
             string fechaFin = Request["fechaFin"];
 
             List<Creditos> creditos = await db.Creditos
-                .Where(x => x.VehiculoId.Equals(idBus) && x.MontoTotal < x.Abonos.Sum( a => a.MontoDeAbono))
+                .Where(
+                x => x.VehiculoId.Equals(idBus) &&
+                x.MontoTotal < x.Abonos.Where(y => y.Estado).Sum( a => a.MontoDeAbono))
                 .ToListAsync();
 
             if(!string.IsNullOrEmpty(fechaInicio) && !string.IsNullOrEmpty(fechaFin))
@@ -107,7 +109,7 @@ namespace Cotracosan.Controllers.Services
             var creditos = await db.Creditos
                 .Include(x => x.Vehiculos)
                 .Where(c => c.Vehiculos.SocioId == id)
-                .Where(c => c.MontoTotal > c.Abonos.Sum( a => a.MontoDeAbono ))
+                .Where(c => c.MontoTotal > c.Abonos.Where(x => x.Estado).Sum( a => a.MontoDeAbono ))
                 .ToListAsync();
 
             var result =
@@ -181,6 +183,45 @@ namespace Cotracosan.Controllers.Services
                 );
 
             return Json(new { Creditos = result }, JsonRequestBehavior.AllowGet);
+        }
+        // Eliminar un credito y sus abonos
+        public async Task<JsonResult> DeleteCredito(int creditoId)
+        {
+            // Buscar el credito.
+            var credito = await db.Creditos.FindAsync(creditoId);
+            if(credito == null)
+                return Json(new { eliminado = false, mensaje = "No se ha encontrado el credito con el id: " + creditoId }, JsonRequestBehavior.AllowGet);
+            using (var transact = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    credito.CreditoAnulado = true;
+                    db.Entry(credito).State = EntityState.Modified;
+                    bool creditoAnulado = await db.SaveChangesAsync() > 0;
+                    bool abonosAnulados = false;
+                    foreach(var abono in credito.Abonos)
+                    {
+                        abono.Estado = false;
+                        db.Entry(abono).State = EntityState.Modified;
+                        abonosAnulados = await db.SaveChangesAsync() > 0;
+                    }
+                    if (creditoAnulado && abonosAnulados)
+                        transact.Commit();
+                    return Json(
+                        new {
+                            eliminado = creditoAnulado && abonosAnulados,
+                            mensaje = creditoAnulado && abonosAnulados ?   "Se ha eliminado el credito solicitado"
+                                      : creditoAnulado && !abonosAnulados ? "No se ha logrado eliminar los abonos del credito"
+                                      : !creditoAnulado && abonosAnulados ? "No se ha logrado eliminar el credito"
+                                      : "No se ha eliminado ningun registro del sistema remoto"
+                        }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception e)
+                {
+                    transact.Rollback();
+                    return Json(new { eliminado = false, mensaje = e.Message }, JsonRequestBehavior.AllowGet);
+                }
+            }            
         }
     }
 }

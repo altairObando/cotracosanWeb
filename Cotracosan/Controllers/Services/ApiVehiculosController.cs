@@ -84,5 +84,48 @@ namespace Cotracosan.Controllers.Services
             
             return Json(new { carreras = totalCarreras, creditos = totalCreditos, abonos = totalAbonos}, JsonRequestBehavior.AllowGet);
         }
+
+        public async Task<JsonResult> getAbonosPorVehiculo(int vehiculoId)
+        {
+            var abonos = await db.Abonos
+                            .Include(c => c.Creditos)
+                            .Include(v => v.Creditos.Vehiculos)
+                            .Where(v => v.Creditos.VehiculoId.Equals(vehiculoId))
+                            .ToListAsync();
+            string fechaInicio = Request["fechaInicio"];
+            string fechaFin = Request["fechaFin"];
+
+            if (!string.IsNullOrEmpty(fechaInicio) && !string.IsNullOrEmpty(fechaFin))
+            {
+                abonos = abonos
+                    .Where(x =>
+                  x.FechaDeAbono.Date >= DateTime.Parse(fechaInicio) &&
+                  x.FechaDeAbono.Date <= DateTime.Parse(fechaFin)
+                    ).ToList();
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(fechaInicio))
+                    abonos = abonos.Where(x => x.FechaDeAbono.Equals(DateTime.Parse(fechaInicio))).ToList();
+            }
+            // Proyeccion para evitar referencias circulares.
+            // y solo seleccionar los datos requeridos.
+            var result = (from i in abonos
+                          orderby i.FechaDeAbono descending
+                          select new
+                          {
+                              IdAbono = i.Id,
+                              CreditoId = i.CreditoId,
+                              VehiculoId = i.Creditos.VehiculoId,
+
+                              Placa = i.Creditos.Vehiculos.Placa,
+                              FechaDeAbono = i.FechaDeAbono.ToShortDateString(),
+                              CodigoAbono = i.CodigoAbono,
+                              MontoDeAbono = i.MontoDeAbono,
+                              AbonoAnulado = i.Estado
+                          });
+            return Json(new { abonos = result }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

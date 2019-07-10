@@ -37,5 +37,20 @@ namespace Cotracosan.Controllers.Services
                             });
             return Json(carreras, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult DeleteCarrera( int carreraId)
+        {
+            // Buscar la carrera
+            var carrera = db.Carreras.Find(carreraId);
+            if (carrera == null)
+                return Json(new { eliminado = false, mensaje = "No existe ninguna carrera con el id: " + carreraId }, JsonRequestBehavior.AllowGet);
+            carrera.CarreraAnulada = true;
+            db.Entry(carrera).State = EntityState.Modified;
+            bool eliminado = db.SaveChanges() > 0;
+            return Json(new {
+                eliminado = eliminado,
+                mensaje = eliminado ? "Se ha eliminado la carrera" : "No se ha eliminado la carrera"
+                });
+        }
     }
 }
