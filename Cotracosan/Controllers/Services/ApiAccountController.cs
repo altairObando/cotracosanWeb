@@ -2,6 +2,8 @@
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -52,16 +54,36 @@ namespace Cotracosan.Controllers.Services
         #endregion Fin de la configuración
 
 
-        public JsonResult IniciarSesion(string Usuario, string Contrasenia)
+        public JsonResult IniciarSesion(string username, string Contrasenia)
         {
-            var result = SignInManager.PasswordSignIn(Usuario, Contrasenia, true, false);
+            var result = SignInManager.PasswordSignIn(username, Contrasenia, true, false);
             bool sesion = result == SignInStatus.Success;
-            string socioId = "";
+            ApplicationUser usuario = null;
             if (sesion)
             {
-                socioId = db.Users.First(x => x.UserName == Usuario).SocioId;
+                usuario = db.Users.First(x => x.UserName == username);
             }
-            return Json( new { login = sesion, SocioId = socioId }, JsonRequestBehavior.AllowGet);
+            if (!sesion)
+                return Json(new
+                {
+                    login = sesion,
+                    message = "Error al inicar sesion",
+                    usuario = usuario
+                }, JsonRequestBehavior.AllowGet);
+            else
+            {
+               
+                return Json(new
+                {
+                    message = "Bienvenido " + usuario.UserName + "!",
+                    login = sesion,
+                    id = usuario.Id,
+                    usuario = usuario.UserName,
+                    socioId = usuario.SocioId,
+                    email = usuario.Email,
+                    imagen = string.Format("data:image/jpeg;base64, {0}", Convert.ToBase64String(usuario.ImagenPerfil))
+                }, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

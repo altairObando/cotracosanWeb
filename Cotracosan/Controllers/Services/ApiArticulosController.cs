@@ -17,7 +17,7 @@ namespace Cotracosan.Controllers.Services
         public async Task<JsonResult> getGastosPorArticulos()
         {
             string sql = @"SELECT A.CodigoDeArticulo, A.DescripcionDeArticulo, SUM(D.Cantidad * A.Precio ) as Gasto
-                           FROM   Articulos A INNER JOIN
+                           FROM Articulos A INNER JOIN
                            DetallesDeCreditos D ON A.Id = D.ArticuloId INNER JOIN
 	                       Creditos C on C.Id = D.CreditoId
                            ";

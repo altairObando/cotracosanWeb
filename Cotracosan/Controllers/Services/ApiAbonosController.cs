@@ -57,9 +57,30 @@ namespace Cotracosan.Controllers.Services
                 catch (Exception e)
                 {
                     transact.Rollback();
-                    return Json(new {  }, JsonRequestBehavior.AllowGet);
+                    return Json(new { guardado = false, mensaje = e.Message }, JsonRequestBehavior.AllowGet);
                 }
             }
+        }
+        public async Task<JsonResult> AbonosPorCredito(int creditoId)
+        {
+            var abonos = await db.Abonos
+                .Where(c => c.CreditoId.Equals(creditoId))
+                .Include(c => c.Creditos)
+                .ToListAsync();
+            // Realizar Proyeccion para evitar referencias circulares.
+            var result = (
+                            from item in
+                            abonos where item.Estado
+                            orderby item.FechaDeAbono descending
+                            select
+                            new {
+                                Id = item.Id,
+                                CreditoId = item.CreditoId,
+                                FechaDeAbono = item.FechaDeAbono.ToShortDateString(),
+                                CodigoAbono = item.CodigoAbono,
+                                MontoDeAbono = item.MontoDeAbono
+                                });
+            return Json(new { abonos = result }, JsonRequestBehavior.AllowGet);
         }
         // Eliminar Abono
         public JsonResult DeleteAbono(int abonoId)

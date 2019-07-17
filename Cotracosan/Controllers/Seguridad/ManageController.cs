@@ -138,7 +138,7 @@ namespace Cotracosan.Controllers
 
             ViewBag.CurrentImage = user.ImagenPerfil != null ? 
                 user.ImagenPerfil.Length > 0 ?
-                string.Format("data:image/jpg; base64, {0}", Convert.ToBase64String(user.ImagenPerfil))
+                string.Format("data:image/jpg;base64, {0}", Convert.ToBase64String(user.ImagenPerfil))
                 : null 
                 : null;
 
