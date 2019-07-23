@@ -40,6 +40,20 @@ namespace Cotracosan.Controllers.Services
             
         }
 
+        public async Task<JsonResult> getArticulos()
+        {
+            var articulos = await db.Articulos.Where(x => x.Estado).ToListAsync();
+            var result = from i in articulos
+                         orderby i.DescripcionDeArticulo
+                         select new
+                         {
+                             Id = i.Id,
+                             Codigo = i.CodigoDeArticulo,
+                             Descripcion = i.DescripcionDeArticulo,
+                             Precio = i.Precio
+                         };
+            return Json(new { result }, JsonRequestBehavior.AllowGet);
+        }
 
         class GastosPorArticulo
         {

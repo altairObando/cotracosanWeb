@@ -12,11 +12,25 @@ namespace Cotracosan.Controllers.Services
     public class ApiVehiculosController : Controller
     {
         private Context db = new Context();
+        // Todos los buses
+        public JsonResult getVehiculos()
+        {
+            var vehiculos = (from v in db.Vehiculos
+                             where v.Estado
+                             select new
+                             {
+                                 Id = v.Id,
+                                 SocioId = v.SocioId,
+                                 Placa = v.Placa
+                             }
+                          );
+            return Json(new { vehiculos }, JsonRequestBehavior.AllowGet);
+        }
         // Todos los buses de un socio.
         public JsonResult getVehiculosPorSocio(int socioId)
         {
             var vehiculos = (from vehiculo in db.Vehiculos
-                          where vehiculo.SocioId == socioId
+                          where vehiculo.SocioId == socioId && vehiculo.Estado
                           select new 
                           {
                               Id = vehiculo.Id,
