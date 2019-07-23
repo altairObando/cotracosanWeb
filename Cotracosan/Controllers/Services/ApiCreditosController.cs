@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Cotracosan.Models.Cotracosan;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using Newtonsoft.Json;
 
 namespace Cotracosan.Controllers.Services
 {
@@ -56,7 +57,7 @@ namespace Cotracosan.Controllers.Services
             List<Creditos> creditos = await db.Creditos
                 .Where(
                 x => x.VehiculoId.Equals(idBus) &&
-                x.MontoTotal < x.Abonos.Where(y => y.Estado).Sum( a => a.MontoDeAbono))
+                x.MontoTotal > x.Abonos.Where(y => y.Estado).Sum( a => a.MontoDeAbono))
                 .ToListAsync();
 
             if(!string.IsNullOrEmpty(fechaInicio) && !string.IsNullOrEmpty(fechaFin))
@@ -222,6 +223,39 @@ namespace Cotracosan.Controllers.Services
                     return Json(new { eliminado = false, mensaje = e.Message }, JsonRequestBehavior.AllowGet);
                 }
             }            
+        }
+        
+        public async Task<JsonResult> AddCredito([Bind(Include = "Id,CodigoCredito,FechaDeCredito,MontoTotal,EstadoDeCredito,CreditoAnulado,VehiculoId")] Creditos creditos, string DetalleCredito)
+        {
+            bool gCredito = false; // se ha guardado el credito ? 
+            bool gDetalle = false; // se ha guardado el detalle ? 
+            List<DetallesDeCreditos> detalle = JsonConvert.DeserializeObject<List<DetallesDeCreditos>>(DetalleCredito);
+
+            using (var transact = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    creditos.EstadoDeCredito = true;
+                    db.Creditos.Add(creditos);
+                    gCredito = await db.SaveChangesAsync() > 0;
+                    if (gCredito)
+                    {
+                        detalle.ForEach(x => x.CreditoId = creditos.Id);
+                        db.DetallesDeCreditos.AddRange(detalle);
+                        gDetalle = await db.SaveChangesAsync() > 0;
+                        // Guardamos la transaccion solo si se guardo el detalle
+                        transact.Commit();
+                    }
+                }
+                catch (Exception)
+                {
+                    transact.Rollback();
+                }
+            }
+            string mensaje = gCredito && gDetalle ? "Credito Guardado Correctamente" :
+                gCredito && !gDetalle ? "No se ha logrado guardar los articulos del credito" :
+                !gCredito && gDetalle ? "No se ha podido guardar el credito" : "Error en la validacion del modelo de datos";
+            return Json(new { success = gCredito && gDetalle, message = mensaje });
         }
     }
 }

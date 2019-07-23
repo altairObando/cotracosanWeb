@@ -615,6 +615,7 @@
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Reports\GetReport.cshtml" />
     <Content Include="Views\Manage\AgregarImagen.cshtml" />
+    <Content Include="Views\Manage\AgregarImagenWebView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

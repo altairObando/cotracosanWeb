@@ -141,7 +141,62 @@ namespace Cotracosan.Controllers
                 string.Format("data:image/jpg;base64, {0}", Convert.ToBase64String(user.ImagenPerfil))
                 : null 
                 : null;
+            return View();
+        }
+        [AllowAnonymous]
+        public ActionResult AgregarImagenWebView()
+        {
+            ViewBag.StatusMessage = "";
+            string userId = Request["userId"];
+            // Obtener la imagen actual del usuario
+            var user = UserManager.FindById(User.Identity.GetUserId()); //aqui seria con userid
+            ViewBag.CurrentImage = user.ImagenPerfil != null ?
+                user.ImagenPerfil.Length > 0 ?
+                string.Format("data:image/jpg;base64, {0}", Convert.ToBase64String(user.ImagenPerfil))
+                : null
+                : null;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AgregarImagenWebView(AddImageViewModel model)
+        {
+            // usuario qu sera actualizado
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
+            var validImageTypes = new string[]
+                {
+                    "image/gif",
+                    "image/jpeg",
+                    "image/pjpeg",
+                    "image/png"
+                };
+            if (model.ImageRoute == null || model.ImageRoute.ContentLength == 0)
+                ModelState.AddModelError("ImageRoute", "Este campo es requerido");
+            else if (!validImageTypes.Contains(model.ImageRoute.ContentType))
+                ModelState.AddModelError("ImageRoute", "La imagen no esta en uno de los formatos admitidos");
+
+            if (ModelState.IsValid)
+            {
+                // Creamos la ruta para almacenar la imagen.
+                if (model.ImageRoute != null && model.ImageRoute.ContentLength > 0)
+                {
+                    user.ImagenPerfil = new byte[model.ImageRoute.ContentLength];
+                    model.ImageRoute.InputStream.Read(user.ImagenPerfil, 0, model.ImageRoute.ContentLength);
+                    var actualizado = await UserManager.UpdateAsync(user);
+                    ViewBag.StatusMessage = actualizado.Succeeded ? "Imagen de perfil actualizada" : "Error durante la actualización";
+                }
+            }
+            else
+            {
+                ViewBag.StatusMessage = "La Imagen no contiene los parametros necesarios para completar esta solicitud";
+            }
+
+            ViewBag.CurrentImage = user.ImagenPerfil != null ?
+                    user.ImagenPerfil.Length > 0 ?
+                    string.Format("data:image/jpg;base64, {0}", Convert.ToBase64String(user.ImagenPerfil))
+                                                                    : null
+                                                                    : null;
             return View();
         }
         [HttpPost]
