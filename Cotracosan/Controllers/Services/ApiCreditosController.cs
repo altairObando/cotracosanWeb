@@ -123,7 +123,7 @@ namespace Cotracosan.Controllers.Services
                         CodigoCredito = item.CodigoCredito,
                         Fecha = item.FechaDeCredito.ToShortDateString(),
                         MontoTotal = item.MontoTotal,
-                        TotalAbonado = item.Abonos.Sum(x => x.MontoDeAbono),
+                        TotalAbonado = item.Abonos.Where(y => y.Estado).Sum(x => x.MontoDeAbono),
                         NumeroAbonos = item.Abonos.Count(),
                         CreditoAnulado = item.CreditoAnulado,
                         EstadoDeCredito = item.EstadoDeCredito,
@@ -224,7 +224,15 @@ namespace Cotracosan.Controllers.Services
                 }
             }            
         }
-        
+        public JsonResult GetUltimoCodigo()
+        {
+            int creditoId = 0;
+            var result = db.Creditos.OrderByDescending(x => x.Id).ToList();
+            if (result.Count > 0)
+                creditoId = result.First().Id;
+
+            return Json(new { codigoCredito = "CRED-" + (creditoId + 1) }, JsonRequestBehavior.AllowGet);
+        }
         public async Task<JsonResult> AddCredito([Bind(Include = "Id,CodigoCredito,FechaDeCredito,MontoTotal,EstadoDeCredito,CreditoAnulado,VehiculoId")] Creditos creditos, string DetalleCredito)
         {
             bool gCredito = false; // se ha guardado el credito ? 
