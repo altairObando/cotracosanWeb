@@ -42,7 +42,14 @@ namespace Cotracosan.Controllers.Services
 
         public async Task<JsonResult> getArticulos()
         {
-            var articulos = await db.Articulos.Where(x => x.Estado).ToListAsync();
+            List<Articulos> articulos;
+            string parametro = Request["parametro"];
+            if(!string.IsNullOrEmpty(parametro))
+                articulos = await db.Articulos.Where(x => x.Estado && 
+                x.DescripcionDeArticulo.ToUpper().Contains(parametro.ToUpper())
+                ).ToListAsync();
+            else
+                articulos = await db.Articulos.Where(x => x.Estado).ToListAsync();
             var result = from i in articulos
                          orderby i.DescripcionDeArticulo
                          select new

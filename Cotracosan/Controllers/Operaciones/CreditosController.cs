@@ -76,7 +76,8 @@ namespace Cotracosan.Controllers.Operaciones
         private string GenerarCodigoCredito()
         {
             // Ultimo id Credito
-            int id = db.Creditos.ToList().OrderByDescending(x => x.Id).First().Id;
+            var list = db.Creditos.ToList();
+            int id = list.Count > 0 ? list.OrderByDescending(x => x.Id).First().Id : 0;
             return "CRED-" + (id + 1);
         }
 
@@ -84,6 +85,7 @@ namespace Cotracosan.Controllers.Operaciones
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,CodigoCredito,FechaDeCredito,MontoTotal,EstadoDeCredito,CreditoAnulado,VehiculoId")] Creditos creditos, string DetalleCredito)
         {

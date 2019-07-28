@@ -226,15 +226,34 @@ namespace Cotracosan.Controllers.Services
         }
         public JsonResult GetUltimoCodigo()
         {
-            int creditoId = 0;
-            var result = db.Creditos.OrderByDescending(x => x.Id).ToList();
-            if (result.Count > 0)
-                creditoId = result.First().Id;
-
-            return Json(new { codigoCredito = "CRED-" + (creditoId + 1) }, JsonRequestBehavior.AllowGet);
+            var list = db.Creditos.ToList();
+            int id = list.Count > 0 ?  list.OrderByDescending(x => x.Id).First().Id : 0;
+            return Json(new { codigoCredito = "CRED-" + (id + 1) }, JsonRequestBehavior.AllowGet);
         }
-        public async Task<JsonResult> AddCredito([Bind(Include = "Id,CodigoCredito,FechaDeCredito,MontoTotal,EstadoDeCredito,CreditoAnulado,VehiculoId")] Creditos creditos, string DetalleCredito)
+
+        [HttpPost]
+        public JsonResult AddCredito()
         {
+            // Obteniendo valores del post
+            int Id = int.Parse(Request["Id"]);
+            string CodigoCredito = Request["CodigoCredito"];
+            DateTime FechaDeCredito = DateTime.Parse(Request["FechaDeCredito"]);
+            decimal MontoTotal = decimal.Parse(Request["MontoTotal"]);
+            bool EstadoDeCredito = bool.Parse(Request["EstadoDeCredito"]);
+            bool CreditoAnulado = bool.Parse(Request["CreditoAnulado"]);
+            int VehiculoId = int.Parse(Request["VehiculoId"]);
+            Creditos creditos = new Creditos
+            {
+                Id = Id,
+                CodigoCredito = CodigoCredito,
+                FechaDeCredito = FechaDeCredito,
+                MontoTotal = MontoTotal,
+                EstadoDeCredito = EstadoDeCredito,
+                CreditoAnulado = CreditoAnulado,
+                VehiculoId = VehiculoId
+            };
+
+            string DetalleCredito = Request["DetalleCredito"];
             bool gCredito = false; // se ha guardado el credito ? 
             bool gDetalle = false; // se ha guardado el detalle ? 
             List<DetallesDeCreditos> detalle = JsonConvert.DeserializeObject<List<DetallesDeCreditos>>(DetalleCredito);
@@ -245,12 +264,12 @@ namespace Cotracosan.Controllers.Services
                 {
                     creditos.EstadoDeCredito = true;
                     db.Creditos.Add(creditos);
-                    gCredito = await db.SaveChangesAsync() > 0;
+                    gCredito = db.SaveChanges() > 0;
                     if (gCredito)
                     {
                         detalle.ForEach(x => x.CreditoId = creditos.Id);
                         db.DetallesDeCreditos.AddRange(detalle);
-                        gDetalle = await db.SaveChangesAsync() > 0;
+                        gDetalle = db.SaveChanges() > 0;
                         // Guardamos la transaccion solo si se guardo el detalle
                         transact.Commit();
                     }

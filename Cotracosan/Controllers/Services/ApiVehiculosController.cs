@@ -79,21 +79,25 @@ namespace Cotracosan.Controllers.Services
             return Json( new { vehiculos = result }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getConsolidadoVehiculo(int id)
+        public JsonResult getConsolidadoVehiculo(int vehiculoId)
         {
             string fechaInicio = Request["fechaInicio"];
             string fechaFin = Request["fechaFin"];
             decimal totalCarreras = 0, totalCreditos = 0, totalAbonos = 0;
             if(string.IsNullOrEmpty(fechaInicio)&& string.IsNullOrEmpty(fechaFin))
             {
-                totalCarreras = db.Carreras.Where(x => x.FechaDeCarrera.Equals(DateTime.Now.Date) && !x.CarreraAnulada).Sum(a => a.MontoRecaudado);
-                totalCreditos = db.Creditos.Where(x => x.FechaDeCredito.Equals(DateTime.Now.Date) && !x.CreditoAnulado).Sum(a => a.MontoTotal);
-                totalAbonos = db.Abonos.Where(x => x.FechaDeAbono.Equals(DateTime.Now.Date) && !x.Estado).Sum(a => a.MontoDeAbono);
-            }else
+                totalCarreras = db.Carreras.Where(x => x.FechaDeCarrera.Equals(DateTime.Now) && !x.CarreraAnulada && x.VehiculoId.Equals(vehiculoId)).ToList().Sum(x => x.MontoRecaudado);
+                // totalCarreras = tmpCarreras != null ? tmpCarreras.Sum(a => a.MontoRecaudado) : 0;
+                totalCreditos = db.Creditos.Where(x => x.FechaDeCredito.Equals(DateTime.Now) && !x.CreditoAnulado && x.VehiculoId.Equals(vehiculoId)).ToList().Sum(a => a.MontoTotal);
+                totalAbonos = db.Abonos.Where(x => x.FechaDeAbono.Equals(DateTime.Now) && !x.Estado && x.Creditos.VehiculoId.Equals(vehiculoId)).ToList().Sum(a => a.MontoDeAbono);
+            }
+            else
             {
-                totalCarreras = db.Carreras.Where(x => (x.FechaDeCarrera >= DateTime.Parse(fechaInicio) && x.FechaDeCarrera <= DateTime.Parse(fechaFin)) && !x.CarreraAnulada).Sum(a => a.MontoRecaudado);
-                totalCreditos = db.Creditos.Where(x => (x.FechaDeCredito >= DateTime.Parse(fechaInicio) && x.FechaDeCredito <= DateTime.Parse(fechaFin)) && !x.CreditoAnulado).Sum(a => a.MontoTotal);
-                totalAbonos = db.Abonos.Where(x => (x.FechaDeAbono >= DateTime.Parse(fechaInicio) && x.FechaDeAbono <= DateTime.Parse(fechaFin)) && !x.Estado).Sum(a => a.MontoDeAbono);
+                DateTime f1 = DateTime.Parse(fechaInicio);
+                DateTime f2 = DateTime.Parse(fechaFin);
+                totalCarreras = db.Carreras.Where(x => (x.FechaDeCarrera >= f1 && x.FechaDeCarrera <= f2 ) && !x.CarreraAnulada && x.VehiculoId.Equals(vehiculoId)).ToList().Sum(a => a.MontoRecaudado);
+                totalCreditos = db.Creditos.Where(x => (x.FechaDeCredito >= f1 && x.FechaDeCredito <= f2 ) && !x.CreditoAnulado && x.VehiculoId.Equals(vehiculoId)).ToList().Sum(a => a.MontoTotal);
+                totalAbonos = db.Abonos.Where(x => (x.FechaDeAbono >= f1 && x.FechaDeAbono <= f2 ) && !x.Estado && x.Creditos.VehiculoId.Equals(vehiculoId)).ToList().Sum(a => a.MontoDeAbono);
             }
             
             return Json(new { carreras = totalCarreras, creditos = totalCreditos, abonos = totalAbonos}, JsonRequestBehavior.AllowGet);

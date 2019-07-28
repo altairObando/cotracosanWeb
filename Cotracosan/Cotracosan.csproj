@@ -222,6 +222,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Manage.asmx.cs">
+      <DependentUpon>Manage.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Cotracosan\Abonos.cs" />
     <Compile Include="Models\Cotracosan\Articulos.cs" />
@@ -272,6 +276,7 @@
     <Content Include="Content\select2\select2.min.css" />
     <Content Include="Content\Tema\style.css" />
     <Content Include="Content\Tema\vendors\base\vendor.bundle.base.css" />
+    <Content Include="Manage.asmx" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Scripts\cotracosan\Creditos.js" />
     <Content Include="Scripts\cotracosan\Dashboard.js" />
