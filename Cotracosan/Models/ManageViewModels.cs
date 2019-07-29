@@ -86,8 +86,15 @@ namespace Cotracosan.Models
 
     public class SocioUsuarioRol
     {
+        [Display(Name ="Seleccione Socio")]
+        [Required(AllowEmptyStrings = true)]
         public int SocioId { get; set; }
+
+        [Display(Name = "Seleccione un Usuario")]
+        [Required]
         public string UserId { get; set; }
+        [Display(Name = "Seleccione nuevo Rol")]
+        [Required]
         public string RolId { get; set; }
     }
 }

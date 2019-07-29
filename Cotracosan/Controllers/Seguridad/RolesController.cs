@@ -1,5 +1,6 @@
 ﻿using Cotracosan.Models;
 using Cotracosan.Models.Cotracosan;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,37 @@ namespace Cotracosan.Controllers
     {
         ApplicationDbContext context = new ApplicationDbContext();
         Models.Cotracosan.Context db = new Models.Cotracosan.Context();
+        public RolesController() { }
+        public RolesController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        {
+            UserManager = userManager;
+            SignInManager = signInManager;
+        }
+        private ApplicationSignInManager _signInManager;
+        private ApplicationUserManager _userManager;
+        public ApplicationSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+            }
+            private set
+            {
+                _signInManager = value;
+            }
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
         // POST: Datatable Roles
         public JsonResult GetRoles()
         {
@@ -138,18 +170,40 @@ namespace Cotracosan.Controllers
         {
             // Lista de usuarios.
             ViewBag.UserId = new SelectList(context.Users, "Id", "Username");
-            ViewBag.RolesId = new SelectList(context.Roles, "Id", "Name");
+            ViewBag.RolId = new SelectList(context.Roles, "Name", "Name");
             return View() ;
         }
         [HttpPost]
-        public ActionResult AsignarUsuarioSocio(SocioUsuarioRol socioUsuario)
+        public async Task<JsonResult> AsignarUsuarioSocio(SocioUsuarioRol model)
         {
-            return View();
+            string msj = "Error al guardar";
+            bool guardo = false;
+            if (string.IsNullOrEmpty(model.UserId) || string.IsNullOrEmpty(model.RolId))
+                ModelState.AddModelError("UserId", "Error de integridad, seleccione Rol y Usuario");
+            if (ModelState.IsValid)
+            {
+                // limpiar los roles del usuario
+                await UserManager.RemoveFromRolesAsync(model.UserId, context.Roles.Select(x => x.Name).ToArray<string>());
+
+                // Establecer un unico rol al usuario.
+                var r = await UserManager.AddToRoleAsync(model.UserId, model.RolId);
+                guardo = r.Succeeded;
+                // Verificar si se ha seleccionado un socio para el usuario
+                if (model.SocioId > 0)
+                {
+                    var user = await UserManager.FindByIdAsync(model.UserId);
+                    user.SocioId = model.SocioId.ToString();
+                    var x = await UserManager.UpdateAsync(user);
+                    guardo = x.Succeeded;
+                }
+                if (guardo)
+                    msj = "Actualización completada.";
+            }
+            return Json(new { success = guardo, mensaje = msj }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult ListaDeSocios(string userId)
         {
             // buscamos el socio asociado actual, si existe.
-            
             string s = context.Users.Find(userId).SocioId;
             if (!string.IsNullOrEmpty(s))
                 ViewBag.SocioId = new SelectList(db.Socios, "Id", "SocioNombre", int.Parse(s));

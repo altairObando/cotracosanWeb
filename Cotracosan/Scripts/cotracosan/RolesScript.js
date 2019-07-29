@@ -176,3 +176,32 @@ function getHtmlData(uri) {
         }
     });
 }
+
+$(document).ready(function () {
+    $("#contentAsignacion").html("");
+    $.ajax({
+        type: "GET",
+        url: "/Roles/AsignarUsuarioSocio/",
+        success: function (data) {
+            $("#contentAsignacion").html(data);
+
+            // Cargando select2
+            $("#UserId,#RolId").select2();
+        }
+    }).fail(function (response) {
+        console.log(response);
+    });
+});
+function actualizarListaSocios(drop) {
+    var id = drop.value;
+    // Peticion ajax para obtener la lista de los socios que no tienen el 
+    // usuario seleccionado y asi evitar tener dos usuarios con el mismo socio.
+    $.ajax({
+        url: "/Roles/ListaDeSocios?userId=" + id,
+        success: function (data) {
+            $("#dropSocios").html(data);
+            $("#SocioId").select2();
+            $("#Roles").trigger('change');
+        }
+    });
+}

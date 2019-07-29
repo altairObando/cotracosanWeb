@@ -1,11 +1,37 @@
-﻿@using Cotracosan.Models.Cotracosan;
+﻿@model Cotracosan.Models.SocioUsuarioRol
 @{ 
     Layout = null;
 }
-
-<div class="col-md-6">
-    @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
-</div>
-<div class="col-md-6">
-    @Html.DropDownList("RolesId", null, htmlAttributes: new { @class = "form-control" })
-</div>
+@using (Html.BeginForm("AsignarUsuarioSocio", "Roles", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", @id="usuarioRolForm"}))
+{
+    <div class="col-md-12">
+        <div class="row">
+            @Html.LabelFor(m => m.UserId, new { @class = "col-md-3 control-label" })
+            <div class="col-md-6">
+                @Html.DropDownList("UserId", (SelectList)ViewBag.UserId, "--------------", htmlAttributes: new { @class = "form-control", @onchange = "actualizarListaSocios(this)" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <div class="row">
+            @Html.LabelFor(m => m.RolId, new { @class = "col-md-3 control-label" })
+            <div class="col-md-6">
+                @Html.DropDownList("RolId", (SelectList)ViewBag.RolId, "--------------", htmlAttributes: new { @class = "form-control",@id= "RolId",@name= "RolId" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <div class="row">
+            @Html.LabelFor(m => m.SocioId, new { @class = "col-md-3 control-label" })
+            <div class="col-md-6" id="dropSocios">
+                @* Carga dinamica. *@
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-4">
+        <button class="btn btn-sm btn-warning offset-10" type="submit">Actualizar</button>
+    </div>
+}
