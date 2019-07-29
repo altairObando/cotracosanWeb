@@ -83,4 +83,11 @@ namespace Cotracosan.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
+
+    public class SocioUsuarioRol
+    {
+        public int SocioId { get; set; }
+        public string UserId { get; set; }
+        public string RolId { get; set; }
+    }
 }

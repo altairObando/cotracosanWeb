@@ -3,6 +3,7 @@ using Cotracosan.Models.Cotracosan;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -135,14 +136,26 @@ namespace Cotracosan.Controllers
         [HttpGet]
         public ActionResult AsignarUsuarioSocio()
         {
-            var a = db.Socios.ToList();
-            var b = context.Users.Where(x => x.SocioId != null && !string.IsNullOrEmpty(x.SocioId)).ToList();
-            List<Socios> result = a.Where( item => 
-            b.Any( c => int.Parse(c.SocioId) != item.Id )
-                ).ToList();
-
-            ViewBag.SocioId = new SelectList(result, "Id", "Nombres");
+            // Lista de usuarios.
+            ViewBag.UserId = new SelectList(context.Users, "Id", "Username");
+            ViewBag.RolesId = new SelectList(context.Roles, "Id", "Name");
             return View() ;
+        }
+        [HttpPost]
+        public ActionResult AsignarUsuarioSocio(SocioUsuarioRol socioUsuario)
+        {
+            return View();
+        }
+        public ActionResult ListaDeSocios(string userId)
+        {
+            // buscamos el socio asociado actual, si existe.
+            
+            string s = context.Users.Find(userId).SocioId;
+            if (!string.IsNullOrEmpty(s))
+                ViewBag.SocioId = new SelectList(db.Socios, "Id", "SocioNombre", int.Parse(s));
+            else
+                ViewBag.SocioId = new SelectList(db.Socios, "Id", "SocioNombre");
+            return View();
         }
     }
 }
