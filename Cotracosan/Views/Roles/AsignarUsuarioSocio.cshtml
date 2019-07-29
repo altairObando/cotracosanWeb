@@ -1,0 +1,21 @@
+﻿@using Cotracosan.Models.Cotracosan;
+@{ 
+    Layout = null;
+}
+
+<div class="row">
+    @* Lista de usuarios *@
+    <div class="col-md-6">
+
+    </div>
+    @* Formulario para asignar un rol. *@
+    <div class="col-md-6">
+        @using (Html.BeginForm("Roles", "AsignarUsuarioSocio", FormMethod.Post, new { @class = "form" }))
+        {
+            <div class="col-md-8">
+                @Html.DropDownList("SocioId", null, htmlAttributes: new { @class = "form-control" })
+                @*@Html.ValidationMessageFor(model => model.SocioId, "", new { @class = "text-danger" })*@
+            </div>
+        }
+    </div>
+</div>

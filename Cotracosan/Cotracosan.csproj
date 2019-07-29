@@ -621,6 +621,7 @@
     <Content Include="Views\Reports\GetReport.cshtml" />
     <Content Include="Views\Manage\AgregarImagen.cshtml" />
     <Content Include="Views\Manage\AgregarImagenWebView.cshtml" />
+    <Content Include="Views\Roles\_AsignarSocio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

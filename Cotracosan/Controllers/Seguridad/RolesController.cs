@@ -1,4 +1,5 @@
 ﻿using Cotracosan.Models;
+using Cotracosan.Models.Cotracosan;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Cotracosan.Controllers
     public class RolesController : Controller
     {
         ApplicationDbContext context = new ApplicationDbContext();
+        Models.Cotracosan.Context db = new Models.Cotracosan.Context();
         // POST: Datatable Roles
         public JsonResult GetRoles()
         {
@@ -129,6 +131,18 @@ namespace Cotracosan.Controllers
             }
             return Json(new {success = guardado, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [HttpGet]
+        public ActionResult AsignarUsuarioSocio()
+        {
+            var a = db.Socios.ToList();
+            var b = context.Users.Where(x => x.SocioId != null && !string.IsNullOrEmpty(x.SocioId)).ToList();
+            List<Socios> result = a.Where( item => 
+            b.Any( c => int.Parse(c.SocioId) != item.Id )
+                ).ToList();
+
+            ViewBag.SocioId = new SelectList(result, "Id", "Nombres");
+            return View() ;
+        }
     }
 }

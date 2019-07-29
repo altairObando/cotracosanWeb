@@ -8,7 +8,6 @@ using System.Web.Services;
 
 namespace Cotracosan
 {
-
     /// <summary>
     /// Descripción breve de Manage
     /// </summary>
@@ -17,7 +16,7 @@ namespace Cotracosan
     [System.ComponentModel.ToolboxItem(false)]
     // Para permitir que se llame a este servicio web desde un script, usando ASP.NET AJAX, quite la marca de comentario de la línea siguiente. 
     [System.Web.Script.Services.ScriptService]
-    public class Manage : System.Web.Services.WebService
+    public class Manage : WebService
     {
         #region Configuración
         private ApplicationDbContext db;
