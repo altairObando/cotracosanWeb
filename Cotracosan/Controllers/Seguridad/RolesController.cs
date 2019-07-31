@@ -183,16 +183,17 @@ namespace Cotracosan.Controllers
             if (ModelState.IsValid)
             {
                 // limpiar los roles del usuario
-                await UserManager.RemoveFromRolesAsync(model.UserId, context.Roles.Select(x => x.Name).ToArray<string>());
+                int a = context.Database.ExecuteSqlCommand("DELETE FROM dbo.AspNetUserRoles WHERE UserId ='"+ model.UserId+"'");
 
                 // Establecer un unico rol al usuario.
                 var r = await UserManager.AddToRoleAsync(model.UserId, model.RolId);
                 guardo = r.Succeeded;
                 // Verificar si se ha seleccionado un socio para el usuario
-                if (model.SocioId > 0)
+                string SocioId = Request["SocioId"];
+                if (!string.IsNullOrEmpty(SocioId))
                 {
                     var user = await UserManager.FindByIdAsync(model.UserId);
-                    user.SocioId = model.SocioId.ToString();
+                    user.SocioId = SocioId.ToString();
                     var x = await UserManager.UpdateAsync(user);
                     guardo = x.Succeeded;
                 }
