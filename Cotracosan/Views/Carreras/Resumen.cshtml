@@ -16,7 +16,11 @@
                     Html.RenderPartial("Details", Model);
                 }
             </div>
-            <div class="col-md-4">
+            <!-- Espacio para el ticket -->
+            <div class="col-md-6" id="ticketVenta">
+                
+            </div>
+            <div class="col-md-2">
                 <h5>Acciones posteriores</h5>
                 <div class="row">
                     <div class="col-md-9">
@@ -26,19 +30,15 @@
                 <br />
                 <div class="row">
                     <div class="col-md-9">
-                        <a class="btn btn-warning" href="@Url.Action("Create", "Creditos", new { @VehiculoId = Model.VehiculoId})">Agregar un credito al vehiculo</a>
+                        <a class="btn btn-warning" href="@Url.Action("Create", "Creditos", new { @VehiculoId = Model.VehiculoId})">Agregar Credito</a>
                     </div>
                 </div>
                 <br />
                 <div class="row">
                     <div class="col-md-9">
-                        <a class="btn btn-info" href="@Url.Action("Create")">Registrar una nueva carrera</a>
+                        <a class="btn btn-info" href="@Url.Action("Create")">Agregar Carrera</a>
                     </div>
                 </div>
-            </div>
-            <!-- Espacio para el ticket -->
-            <div class="col-md-4" id="ticketVenta">
-                
             </div>
         </div>
     </div>

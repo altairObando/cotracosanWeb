@@ -1,5 +1,5 @@
 ﻿<nav class="sidebar sidebar-offcanvas" id="sidebar">
-    @if (User.IsInRole("Administrador,Contador"))
+    @if (User.IsInRole("Administrador") || User.IsInRole("Contador"))
     {
         <ul class="nav">
             <li class="nav-item">
