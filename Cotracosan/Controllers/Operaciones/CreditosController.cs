@@ -70,6 +70,7 @@ namespace Cotracosan.Controllers.Operaciones
         {
             ViewBag.CodigoCredito = GenerarCodigoCredito();
             ViewBag.VehiculoId = new SelectList(db.Vehiculos.Where(x => x.Estado), "Id", "Placa");
+            ViewBag.id = Request["VehiculoId"];
             return View();
         }
 

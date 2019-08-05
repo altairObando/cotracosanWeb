@@ -1,66 +1,86 @@
 ﻿@model Cotracosan.Models.Cotracosan.Creditos
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles de Credito";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Creditos</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Vehiculos.Placa)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Vehiculos.Placa)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CodigoCredito)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CodigoCredito)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FechaDeCredito)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FechaDeCredito)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.MontoTotal)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.MontoTotal)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EstadoDeCredito)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EstadoDeCredito)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreditoAnulado)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreditoAnulado)
-        </dd>
-
-    </dl>
+<h2>Detalles</h2>
+<div class="row">
+    <div class="col-md-3">
+        <div>
+            <h4>Datos Básicos</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Vehiculos.Placa)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Vehiculos.Placa)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.CodigoCredito)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.CodigoCredito)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.FechaDeCredito)
+                </dt>
+                <dd>
+                    @Model.FechaDeCredito.ToShortDateString()
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.MontoTotal)
+                </dt>
+                <dd>
+                    C$ @Html.DisplayFor(model => model.MontoTotal)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Vehiculos.SocioId)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Vehiculos.Socios.SocioNombre)
+                </dd>               
+                <dt>
+                    Abonos Efectuados
+                </dt>
+                <dd>
+                    @Model.Abonos.Count
+                </dd>
+                <dt>
+                    Total Abonado
+                </dt>
+                <dd>
+                    C$ @Model.Abonos.Where(x => x.Estado).Sum(y => y.MontoDeAbono)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h4>Articulos</h4>
+        <hr />
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Articulo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in Model.DetallesDeCreditos)
+                    {
+                        <tr>
+                            <td>@item.Articulos.CodigoDeArticulo </td>
+                            <td>@item.Articulos.DescripcionDeArticulo </td>
+                            <td>@item.Cantidad</td>
+                            <td>@item.Articulos.Precio</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

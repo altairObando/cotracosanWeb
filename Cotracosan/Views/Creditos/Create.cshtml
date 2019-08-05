@@ -169,6 +169,12 @@
         $("#VehiculoId").select2({
             width: '100%'
         });
+        @if(ViewBag.id != null)
+        {
+            <text>
+        $("#VehiculoId").val(@ViewBag.id).trigger('change');
+        </text>
+        }
         var now = new Date();
         var day = ("0" + now.getDate()).slice(-2);
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -177,14 +183,14 @@
         $("#CodigoCredito").val('@ViewBag.CodigoCredito');
         dataTableSeleccion = $("#tableSeleccion").DataTable({
             paging: false,
-            info:false,
+            info: false,
             searching: false,
             ordering: false,
             language: {
                 emptyTable: "Sin articulos"
             }, columnDefs: [
                 { targets: 5, render: function () { return "<button class='btn btn-sm btn-warning'>Remover</button>"; } },
-                { targets: [3, 4], render: function (data) { return "C$ " + data; }}
+                { targets: [3, 4], render: function (data) { return "C$ " + data; } }
 
             ]
         });

@@ -8,6 +8,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Cotracosan.Models.Cotracosan;
+using Microsoft.Reporting.WebForms;
+using System.Web.UI.WebControls;
 
 namespace Cotracosan.Controllers.Operaciones
 {
@@ -176,7 +178,21 @@ namespace Cotracosan.Controllers.Operaciones
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
+        public ActionResult TicketFactura(int id)
+        {
+            cotracosanWebDataSet ds = new cotracosanWebDataSet();
+            ReportViewer rv = new ReportViewer();
+            rv.ProcessingMode = ProcessingMode.Local;
+            rv.SizeToReportContent = true;
+            var adapter = new cotracosanWebDataSetTableAdapters.TicketCarreraTableAdapter();
+            adapter.Fill(ds.TicketCarrera, id);
+            rv.LocalReport.ReportPath = Request.MapPath(Request.ApplicationPath) + @"Reportes/TicketCarrera.rdlc";
+            rv.LocalReport.DataSources.Add(new ReportDataSource("DataSet1", ds.Tables["TicketCarrera"]));
+            rv.Width = Unit.Percentage(100);
+            rv.Height = Unit.Percentage(100);
+            ViewBag.reporte = rv;
+            return View();
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

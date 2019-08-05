@@ -5,21 +5,6 @@
     Decimal total = Model.MontoRecaudado - Model.Multa;
     string mostrarTotal = string.Format("{0:C}", total);
 }
-
-@*<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header bg-primary">
-                Se ha guardado la carrera
-            </div>
-            <div class="card-body">
-                <div class="dl-">
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>*@
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1 class="display-4">Carrera Guardada</h1>
@@ -35,7 +20,7 @@
                 <h5>Acciones posteriores</h5>
                 <div class="row">
                     <div class="col-md-9">
-                        <a class="btn btn-success" href="#">Imprimir Reporte</a>
+                        <a class="btn btn-success" href="@Url.Action("TicketFactura", new { @id = Model.Id})" target="_blank">Imprimir Reporte</a>
                     </div>
                 </div>
                 <br />
