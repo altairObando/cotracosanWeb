@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace Cotracosan.Controllers.Reportes
 {
+    [Authorize]
     public class ReportsController : Controller
     {
         // GET: Reports/

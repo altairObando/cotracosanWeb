@@ -82,6 +82,8 @@ namespace Cotracosan.Controllers.Catalogos
         // GET: Turnos/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            if (!User.IsInRole("Administrador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -99,6 +101,7 @@ namespace Cotracosan.Controllers.Catalogos
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,CodigoDeTurno,HoraDeSalida,HoraDeLlegada,Estado")] Turnos turnos)
         {
+
             turnos.Estado = true;
             if (ModelState.IsValid)
             {
@@ -111,9 +114,10 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Turnos/Delete/5
-        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
+            if (!User.IsInRole("Administrador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

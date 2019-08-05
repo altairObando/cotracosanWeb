@@ -116,9 +116,10 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Conductores/Delete/5
-        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
+            if (!User.IsInRole("Administrador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

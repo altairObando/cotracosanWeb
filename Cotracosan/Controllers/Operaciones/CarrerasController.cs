@@ -92,6 +92,7 @@ namespace Cotracosan.Controllers.Operaciones
         }
 
         // GET: Carreras/Create
+        [Authorize(Roles ="Cajero")]
         public ActionResult Create()
         {
             // Obtener la penalizacion vigente
@@ -156,6 +157,8 @@ namespace Cotracosan.Controllers.Operaciones
         // GET: Carreras/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+            if (!User.IsInRole("Administrador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -178,6 +181,7 @@ namespace Cotracosan.Controllers.Operaciones
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
         public ActionResult TicketFactura(int id)
         {
             cotracosanWebDataSet ds = new cotracosanWebDataSet();
@@ -193,6 +197,7 @@ namespace Cotracosan.Controllers.Operaciones
             ViewBag.reporte = rv;
             return View();
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

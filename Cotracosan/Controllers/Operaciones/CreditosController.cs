@@ -17,6 +17,7 @@ namespace Cotracosan.Controllers.Operaciones
     {
         private Context db = new Context();
         // GET: Creditos/GetCreditos
+        [AllowAnonymous]
         public JsonResult GetCreditos()
         {
             var creditos = db.Creditos.ToList();
@@ -40,6 +41,7 @@ namespace Cotracosan.Controllers.Operaciones
         // GET Abonos/5
         public ActionResult Abonos(int id)
         {
+            ViewBag.MontoTotal = db.Creditos.Find(id).MontoTotal;
             List<Abonos> abonos = db.Abonos.Where(x => x.CreditoId == id).ToList();
             return View("DetalleAbonos",abonos);
         }
@@ -66,6 +68,7 @@ namespace Cotracosan.Controllers.Operaciones
         }
 
         // GET: Creditos/Create
+        [Authorize(Roles ="Cajero")]
         public ActionResult Create()
         {
             ViewBag.CodigoCredito = GenerarCodigoCredito();
@@ -162,6 +165,8 @@ namespace Cotracosan.Controllers.Operaciones
         // GET: Creditos/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+            if (!User.IsInRole("Administrador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

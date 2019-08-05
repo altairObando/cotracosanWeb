@@ -61,10 +61,6 @@ namespace Cotracosan.Controllers.Catalogos
         {
             return View();
         }
-
-        // POST: Articulos/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,CodigoDeArticulo,DescripcionDeArticulo,Precio,Estado")] Articulos articulos)
@@ -83,6 +79,8 @@ namespace Cotracosan.Controllers.Catalogos
         // GET: Articulos/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            if (!User.IsInRole("Administrador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -114,9 +112,10 @@ namespace Cotracosan.Controllers.Catalogos
         }
 
         // GET: Articulos/Delete/5
-        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult> Delete(int? id)
         {
+            if (!User.IsInRole("Administrador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

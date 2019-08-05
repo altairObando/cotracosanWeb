@@ -264,6 +264,7 @@
     <Content Include="Content\dataTables.semanticui.css" />
     <Content Include="Content\dataTables.semanticui.min.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\images\403-forbidden.jpg" />
     <Content Include="Content\images\face20.jpg" />
     <Content Include="Content\images\logo-mini.svg" />
     <Content Include="Content\images\logo.svg" />
@@ -624,6 +625,7 @@
     <Content Include="Views\Roles\AsignarUsuarioSocio.cshtml" />
     <Content Include="Views\Roles\ListaDeSocios.cshtml" />
     <Content Include="Views\Carreras\TicketFactura.cshtml" />
+    <Content Include="Views\Shared\_Error403.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

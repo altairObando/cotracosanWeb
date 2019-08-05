@@ -12,13 +12,10 @@
     }
 </style>
 <div class="row">
-    <div class="col-md-10 offset-1">
+    <div class="col-md-12">
         @Html.ReportViewer(ViewBag.reporte as Microsoft.Reporting.WebForms.ReportViewer, new { @scrolling = "yes" })
     </div>
 </div>
-
-
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
     $(document).ready(function () {
         if ($.browser.mozilla) {

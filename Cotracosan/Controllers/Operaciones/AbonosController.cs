@@ -82,6 +82,7 @@ namespace Cotracosan.Controllers.Operaciones
             return dif;
         }
         // GET: Abonos/Create
+        [Authorize(Roles ="Cajero")]
         public ActionResult Agregar()
         {
             // Si proviene de una redireccion
@@ -119,6 +120,8 @@ namespace Cotracosan.Controllers.Operaciones
         // GET: Abonos/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            if (!User.IsInRole("Administrador") || !User.IsInRole("Contador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -152,6 +155,8 @@ namespace Cotracosan.Controllers.Operaciones
         // GET: Abonos/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+            if (!User.IsInRole("Administrador"))
+                return View("~/Views/Shared/_Error403.cshtml");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

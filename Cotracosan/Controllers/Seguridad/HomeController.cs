@@ -25,6 +25,9 @@ namespace Cotracosan.Controllers
         };
         public ActionResult Index()
         {
+            
+            if (User.IsInRole("Cajero"))
+                return RedirectToAction("Create", "Carreras");
             return View();
         }
 
@@ -164,8 +167,7 @@ namespace Cotracosan.Controllers
         /// Obtiene las ultimas 30 fechas de ventas
         /// </summary>
         /// <returns>Json Result</returns>
-        [AllowAnonymous]
-        
+        [AllowAnonymous]        
         public JsonResult GetTimeSeries()
         {
             // Agrupar las carreras por fecha y seleccionar las ultimas 30
