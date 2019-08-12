@@ -277,7 +277,7 @@
                 },
            {
                // Ajustes
-               type: "danger",
+               type: "warning",
                allow_dismiss: true,
                placement: {
                    from: "top",
@@ -319,32 +319,87 @@
     }
     function SubmitForm() {
         $.validator.unobtrusive.parse($("#FormCreditos"));
-        if ($($("#FormCreditos")).valid() && dataTableSeleccion.data().length > 0) {
-            $("#spinner").show();
-            $.ajax({
-                url: $("#FormCreditos")[0].action,
-                type: "POST",
-                data: $("#FormCreditos").serialize() + "&DetalleCredito="+getDetalle(),
-                dataType: "JSON",
-                success: function (data) {
-                    if (data.success)
-                    { window.location.href = "/Creditos/index"; }
-                    else {
-                        alert("No se logro guardar uwu");
+        var idVehiculo = $("#VehiculoId").val();
+        if(idVehiculo > 0)
+        {
+            if ($($("#FormCreditos")).valid() && dataTableSeleccion.data().length > 0) {
+                $("#spinner").show();
+                $.ajax({
+                    url: $("#FormCreditos")[0].action,
+                    type: "POST",
+                    data: $("#FormCreditos").serialize() + "&DetalleCredito=" + getDetalle(),
+                    dataType: "JSON",
+                    success: function (data) {
+                        if (data.success)
+                        { window.location.href = "/Creditos/details/" + data.idCredito; }
+                        else {
+                            $.notify({
+                                // Opciones
+                                message: data.message,
+                                allow_dismiss: true
+                            },
+                            {
+               // Ajustes
+               type: "danger",
+               allow_dismiss: true,
+               placement: {
+                   from: "top",
+                   align: "center"
+               },
+           });
+                        }
+                        $("#spinner").hide();
+
+                    }, error: function (data) {
+                        $("#spinner").hide();
+                        $.notify({
+                            // Opciones
+                            message: data.message,
+                            allow_dismiss: true
+                        },
+                           {
+                               // Ajustes
+                               type: "danger",
+                               allow_dismiss: true,
+                               placement: {
+                                   from: "top",
+                                   align: "center"
+                               },
+                           });
                     }
-                    $("#spinner").hide();
-
-                }, error: function (data) {
-                    $("#spinner").show();
-
-                    alert(data);
-                }
-            });
+                });
+            } else {
+                $.notify({
+                    // Opciones
+                    message: "Faltan datos para completar la operación",
+                    allow_dismiss: true
+                }, {
+                    // Ajustes
+                    type: "danger",
+                    allow_dismiss: true,
+                    placement: {
+                             from: "top",
+                             align: "center"
+                               },
+                    });
+            }
         } else {
-            alert("Error");
+            $.notify({
+                // Opciones
+                message: "Seleccione un vehiculo",
+                allow_dismiss: true
+            },
+            {
+                // Ajustes
+                type: "danger",
+                allow_dismiss: true,
+                placement: {
+                    from: "top",
+                    align: "center"
+                },
+            });
         }
     }
-
     </script>
 <style>
         table.dataTable tbody th, table.dataTable tbody td {

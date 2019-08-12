@@ -95,6 +95,7 @@ namespace Cotracosan.Controllers.Operaciones
         {
             bool gCredito = false; // se ha guardado el credito ? 
             bool gDetalle = false; // se ha guardado el detalle ? 
+            int idCredito = 0;
             List<DetallesDeCreditos> detalle = JsonConvert.DeserializeObject<List<DetallesDeCreditos>>(DetalleCredito);
             if (detalle.Count < 1)
                 ModelState.AddModelError("Detalle de Credito", "No se ha agregado ningun detalle al credito actual ó no se ha logrado deserializar el contenido");
@@ -114,7 +115,11 @@ namespace Cotracosan.Controllers.Operaciones
                             db.DetallesDeCreditos.AddRange(detalle);
                             gDetalle = await db.SaveChangesAsync() > 0;
                             // Guardamos la transaccion solo si se guardo el detalle
-                            transact.Commit();
+                            if(gDetalle)
+                            {
+                                idCredito = creditos.Id;
+                                transact.Commit();
+                            }
                         }
                     }
                     catch (Exception)
@@ -126,7 +131,7 @@ namespace Cotracosan.Controllers.Operaciones
             string mensaje = gCredito && gDetalle ? "Credito Guardado Correctamente" :
                 gCredito && !gDetalle ? "No se ha logrado guardar los articulos del credito" :
                 !gCredito && gDetalle ? "No se ha podido guardar el credito" : "Error en la validacion del modelo de datos";
-            return Json(new { success = gCredito && gDetalle, message = mensaje });
+            return Json(new { success = gCredito && gDetalle, message = mensaje, idCredito = idCredito });
         }
 
         // GET: Creditos/Edit/5
