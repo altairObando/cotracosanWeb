@@ -1,0 +1,18 @@
+﻿@using ReportViewerForMvc;
+@{
+    Layout = null;
+}
+<style>
+    iframe {
+        height: 100%;
+        width: 100%;
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+</style>
+<h5>Factura de Credito</h5>
+@Html.ReportViewer(ViewBag.reporte as Microsoft.Reporting.WebForms.ReportViewer, new { @scrolling = "yes" })
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>  

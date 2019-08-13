@@ -19,7 +19,7 @@
     <AssemblyName>Cotracosan</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -632,6 +632,7 @@
     <Content Include="Views\Roles\ListaDeSocios.cshtml" />
     <Content Include="Views\Carreras\TicketFactura.cshtml" />
     <Content Include="Views\Shared\_Error403.cshtml" />
+    <Content Include="Views\Creditos\FacturaCredito.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -650,6 +651,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reportes\Articulos.rdlc" />
+    <EmbeddedResource Include="Reportes\FacturaCredito.rdlc" />
     <EmbeddedResource Include="Reportes\TicketCarrera.rdlc" />
   </ItemGroup>
   <PropertyGroup>
@@ -674,7 +676,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63572</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:9000/</IISUrl>
+          <IISUrl>http://localhost/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

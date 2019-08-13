@@ -48,5 +48,9 @@ namespace Cotracosan.Models.Cotracosan
                 return this.CodigoSocio + " " + this.Nombres + " " + this.Apellido1Socio;
             }
         }
+        public override string ToString()
+        {
+            return this.Nombres + " " + this.Apellido1Socio;
+        }
     }
 }

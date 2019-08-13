@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Mvc;
 using Cotracosan.Models.Cotracosan;
 using Newtonsoft.Json;
+using Microsoft.Reporting.WebForms;
+using System.Web.UI.WebControls;
 
 namespace Cotracosan.Controllers.Operaciones
 {
@@ -193,6 +195,35 @@ namespace Cotracosan.Controllers.Operaciones
             db.Creditos.Remove(creditos);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult FacturaCredito(int id)
+        {
+            var credito = db.Creditos.Find(id);
+            if (credito == null)
+                return HttpNotFound();
+
+            cotracosanWebDataSet ds = new cotracosanWebDataSet();
+            ReportViewer rv = new ReportViewer();
+            rv.ProcessingMode = ProcessingMode.Local;
+            rv.SizeToReportContent = true;
+            var adapter = new cotracosanWebDataSetTableAdapters.FacturaDetalleCreditoTableAdapter();
+            adapter.FillByCreditoId(ds.FacturaDetalleCredito, id);
+            rv.LocalReport.ReportPath = Request.MapPath(Request.ApplicationPath) + @"Reportes/FacturaCredito.rdlc";
+            rv.LocalReport.DataSources.Add(new ReportDataSource("DataSet1", ds.Tables["FacturaDetalleCredito"]));
+            rv.SizeToReportContent = false;
+            rv.ZoomMode = ZoomMode.FullPage;
+            rv.Width = Unit.Pixel(1600);
+            rv.Height = Unit.Pixel(1200);
+            rv.AsyncRendering = false;
+            rv.LocalReport.SetParameters(new ReportParameter[] {
+                new ReportParameter("Socio", credito.Vehiculos.Socios.ToString()),
+                new ReportParameter("Placa", credito.Vehiculos.Placa),
+                new ReportParameter("Fecha", credito.FechaDeCredito.ToShortDateString())
+            });
+            ViewBag.reporte = rv;
+            return View();
         }
 
         protected override void Dispose(bool disposing)

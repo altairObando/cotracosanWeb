@@ -8,7 +8,7 @@
 <head runat="server">
     <title></title>
 </head>
-<body style="margin: 0px; padding: 0px;">
+<body style="margin: 0px; padding: 0px; width: 100%">
     <form id="form1" runat="server">
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
