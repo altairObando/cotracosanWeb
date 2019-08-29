@@ -14,12 +14,15 @@ namespace Cotracosan.Controllers.Services
     {
         private Context db = new Context();
         // Todos los creditos efectuados a un bus o a todos
-        public async Task<JsonResult> GetCreditos(int? idBus)
+        public async Task<JsonResult> GetCreditos(int? idBus, int? idCredito)
         {
             List<Creditos> creditos = idBus == null ?
                 await db.Creditos.ToListAsync() :
                 await db.Creditos.Where(y => y.VehiculoId.Equals((int)idBus)).ToListAsync();
-
+            if(idCredito != null)
+            {
+                creditos = creditos.Where(x => x.Id == idCredito).ToList();
+            }
             var result =
                 (
                     from item in creditos
