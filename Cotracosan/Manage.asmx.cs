@@ -58,7 +58,51 @@ namespace Cotracosan
             }
         }
         #endregion Fin de la configuración        
+        [WebMethod]
+        public WebLoginResult IniciarSesion(string username, string Contrasenia)
+        {
+            var result = SignInManager.PasswordSignIn(username, Contrasenia, true, false);
+            bool sesion = result == SignInStatus.Success;
+            ApplicationUser usuario = null;
+            if (sesion)
+            {
+                usuario = db.Users.First(x => x.UserName == username);
+            }
+            if (!sesion)
+                return new WebLoginResult
+                {
+                    IsLogged = sesion,
+                    Mensaje = "Error al inicar sesion",
+                    UserName = usuario.UserName
+                };
+            else
+            {
+                var roles = UserManager.GetRolesAsync(usuario.Id).Result;
+                return new
+                WebLoginResult
+                {
+                    Mensaje = "Bienvenido " + usuario.UserName + "!",
+                    IsLogged = sesion,
+                    UserId = usuario.Id,
+                    UserName = usuario.UserName,
+                    SocioId = usuario.SocioId,
+                    Email = usuario.Email,
+                    Rol = roles.FirstOrDefault(),
+                    Imagen = string.Format("data:image/jpeg;base64, {0}", Convert.ToBase64String(usuario.ImagenPerfil))
+                };
+            }
+        }
 
+        [WebMethod]
+        public WebResult CambiarContraseña(string usuarioId, string viejaContrasenia, string nuevaContrasenia)
+        {
+            var result = UserManager.ChangePasswordAsync(usuarioId, viejaContrasenia, nuevaContrasenia).Result;
+            return (new WebResult
+            {
+                Completado = result.Succeeded,
+                Mensaje = result.Succeeded ? "Se ha cambiado la contraseña" : "Error durante el cambio de contraseña"
+            });
+        }
         [WebMethod]
         public bool CambiarImagen(byte[] imagen, string idUsuario)
         {
@@ -72,5 +116,17 @@ namespace Cotracosan
             }
             return actualizado;
         }
+    }
+
+    public class WebLoginResult
+    {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string SocioId { get; set; }
+        public string Email { get; set; }
+        public string Rol { get; set; }
+        public string Imagen { get; set; }
+        public string Mensaje { get; set; }
+        public bool IsLogged { get; set; }
     }
 }

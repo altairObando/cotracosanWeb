@@ -62,7 +62,7 @@ namespace Cotracosan.Controllers.Services
             return Json(new { result }, JsonRequestBehavior.AllowGet);
         }
 
-        class GastosPorArticulo
+        public class GastosPorArticulo
         {
             public string CodigoDeArticulo { get; set; }
             public string DescripcionDeArticulo { get; set; }
