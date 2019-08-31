@@ -223,6 +223,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>cotracosanWebDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Models\WebModels\DetallesDeCreditosSW.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -688,8 +689,6 @@
           <DevelopmentServerPort>63572</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:63572/</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

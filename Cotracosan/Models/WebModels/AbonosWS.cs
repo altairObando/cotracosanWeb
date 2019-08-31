@@ -1,7 +1,8 @@
 namespace Cotracosan.Models.Cotracosan
 {
     using System;
-    public partial class AbonosWS
+    [Serializable]
+    public class AbonosWS
     {
         public int Id { get; set; }
         public int CreditoId { get; set; }
