@@ -1,4 +1,5 @@
 ﻿using Cotracosan.Models;
+using Cotracosan.Services;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Cotracosan
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // Para permitir que se llame a este servicio web desde un script, usando ASP.NET AJAX, quite la marca de comentario de la línea siguiente. 
-    [System.Web.Script.Services.ScriptService]
+    //[System.Web.Script.Services.ScriptService]
     public class Manage : WebService
     {
         #region Configuración
@@ -71,9 +72,9 @@ namespace Cotracosan
             if (!sesion)
                 return new WebLoginResult
                 {
-                    IsLogged = sesion,
+                    IsLogged = false,
                     Mensaje = "Error al inicar sesion",
-                    UserName = usuario.UserName
+                    UserName = username
                 };
             else
             {
@@ -88,7 +89,7 @@ namespace Cotracosan
                     SocioId = usuario.SocioId,
                     Email = usuario.Email,
                     Rol = roles.FirstOrDefault(),
-                    Imagen = string.Format("data:image/jpeg;base64, {0}", Convert.ToBase64String(usuario.ImagenPerfil))
+                    //Imagen = usuario.ImagenPerfil
                 };
             }
         }
@@ -125,7 +126,7 @@ namespace Cotracosan
         public string SocioId { get; set; }
         public string Email { get; set; }
         public string Rol { get; set; }
-        public string Imagen { get; set; }
+        public byte[] Imagen { get; set; }
         public string Mensaje { get; set; }
         public bool IsLogged { get; set; }
     }

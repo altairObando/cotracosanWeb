@@ -9,5 +9,8 @@ namespace Cotracosan.Models.Cotracosan
         public DateTime FechaDeAbono { get; set; }
         public string CodigoAbono { get; set; }
         public decimal MontoDeAbono { get; set; }
+        public int VehiculoId { get; set; }
+        public string Placa { get; set; }
+        public bool AbonoAnulado { get; set; }
     }
 }

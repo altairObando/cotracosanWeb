@@ -70,7 +70,7 @@ namespace Cotracosan.Controllers.Services
                 {
                     login = sesion,
                     message = "Error al inicar sesion",
-                    usuario = usuario
+                    usuario = username
                 }, JsonRequestBehavior.AllowGet);
             else
             {

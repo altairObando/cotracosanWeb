@@ -1,25 +1,23 @@
 ﻿using Cotracosan.Models.Cotracosan;
-using Cotracosan.Models.WebModels;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Data.Entity;
 using System.Web;
-using System.Web.Mvc;
 using System.Web.Services;
+using Cotracosan.Models.WebModels;
 
-namespace Cotracosan
+namespace Cotracosan.Services
 {
     /// <summary>
-    /// Descripción breve de WebService
+    /// Descripción breve de WebServices
     /// </summary>
-    [WebService(Namespace = "http://cotracosan.somee.com/")]
+    [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // Para permitir que se llame a este servicio web desde un script, usando ASP.NET AJAX, quite la marca de comentario de la línea siguiente. 
     // [System.Web.Script.Services.ScriptService]
-    public class WebService : System.Web.Services.WebService
+    public class WebServices : System.Web.Services.WebService
     {
         private Context db = new Context();
         #region ApiAbonos
@@ -78,10 +76,11 @@ namespace Cotracosan
             var abonos = db.Abonos
                 .Where(c => c.CreditoId.Equals(creditoId))
                 .Include(c => c.Creditos)
-                .Select( x => new AbonosWS {
+                .Select(x => new AbonosWS
+                {
                     CodigoAbono = x.CodigoAbono,
                     CreditoId = x.CreditoId,
-                    FechaDeAbono =x.FechaDeAbono, 
+                    FechaDeAbono = x.FechaDeAbono,
                     Id = x.Id,
                     MontoDeAbono = x.MontoDeAbono
                 }
@@ -102,7 +101,7 @@ namespace Cotracosan
 
             bool guardado = db.SaveChanges() > 0;
             return new
-             Cotracosan.WebResult
+             WebResult
             {
                 Completado = guardado,
                 Mensaje = guardado ? "Se ha eliminado el abono" : "No se ha logrado eliminar el abono, error del servidor"
@@ -111,7 +110,7 @@ namespace Cotracosan
         #endregion
         #region Articulos
         [WebMethod]
-        public List<GastosPorArticulo> GetGastosPorArticulos(string fechaInicio, string fechaFin )
+        public List<GastosPorArticulo> GetGastosPorArticulos(string fechaInicio, string fechaFin)
         {
             string sql = @"SELECT A.CodigoDeArticulo, A.DescripcionDeArticulo, SUM(D.Cantidad * A.Precio ) as Gasto
                            FROM Articulos A INNER JOIN
@@ -146,14 +145,14 @@ namespace Cotracosan
             else
                 articulos = db.Articulos.Where(x => x.Estado).ToListAsync().Result;
             var result = (from i in articulos
-                         orderby i.DescripcionDeArticulo
-                         select new ArticulosSW
-                         {
-                             Id = i.Id,
-                             Codigo = i.CodigoDeArticulo,
-                             Descripcion = i.DescripcionDeArticulo,
-                             Precio = i.Precio
-                         }).ToList();
+                          orderby i.DescripcionDeArticulo
+                          select new ArticulosSW
+                          {
+                              Id = i.Id,
+                              Codigo = i.CodigoDeArticulo,
+                              Descripcion = i.DescripcionDeArticulo,
+                              Precio = i.Precio
+                          }).ToList();
             return result;
         }
         #endregion
@@ -403,7 +402,8 @@ namespace Cotracosan
         [WebMethod]
         public WebResult AgregarCredito(CreditosSW cred, List<DetallesDeCreditosSW> detallesw)
         {
-            var creditos = new Creditos {
+            var creditos = new Creditos
+            {
                 CodigoCredito = cred.CodigoCredito,
                 CreditoAnulado = false,
                 EstadoDeCredito = true,
@@ -426,7 +426,7 @@ namespace Cotracosan
                         var detalle = detallesw.Select(z => new DetallesDeCreditos
                         {
                             ArticuloId = z.ArticuloId,
-                            Cantidad =z.Cantidad,
+                            Cantidad = z.Cantidad,
                             CreditoId = creditos.Id,
                             Id = 0
                         }).ToList();
@@ -450,7 +450,7 @@ namespace Cotracosan
         #endregion
         #region ApiSocios
         [WebMethod]
-        public List<SociosSW> GetAbonosPorSocio(int socioId, DateTime fechaInicio, DateTime fechaFin)
+        public List<AbonosWS> GetAbonosPorSocio(int socioId, DateTime fechaInicio, DateTime fechaFin)
         {
             // Filtrar todos los abonos por socioId
             var abonos = db.Abonos
@@ -467,18 +467,30 @@ namespace Cotracosan
             // y solo seleccionar los datos requeridos.
             var result = (from i in abonos
                           orderby i.FechaDeAbono descending
-                          select new SociosSW
+                          select new AbonosWS
                           {
-                              IdAbono = i.Id,
+                              Id = i.Id,
                               CreditoId = i.CreditoId,
                               VehiculoId = i.Creditos.VehiculoId,
                               Placa = i.Creditos.Vehiculos.Placa,
-                              FechaDeAbono = i.FechaDeAbono.ToShortDateString(),
+                              FechaDeAbono = i.FechaDeAbono,
                               CodigoAbono = i.CodigoAbono,
                               MontoDeAbono = i.MontoDeAbono,
                               AbonoAnulado = i.Estado
                           }).ToList();
             return result;
+        }
+        [WebMethod]
+        public List<SociosSW> GetSocios()
+        {
+            return db.Socios.ToList().Select(x => new SociosSW {
+                Id = x.Id,
+                Apellido1Socio = x.Apellido1Socio,
+                Apellido2Socio = x.Apellido2Socio,
+                CodigoSocio = x.CodigoSocio,
+                Estado = x.Estado,
+                Nombres = x.Nombres
+            }).ToList();
         }
         #endregion
         #region ApiVehiculos
