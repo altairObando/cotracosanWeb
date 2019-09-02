@@ -247,12 +247,24 @@ namespace Cotracosan.Services
         [WebMethod]
         public List<CreditosSW> GetCreditosPendientesPorBus(int idBus, DateTime fechaInicio, DateTime fechaFin)
         {
-            List<Creditos> creditos = db.Creditos
+            List<Creditos> temp = db.Creditos
                 .Where(
-                x => x.VehiculoId.Equals(idBus) &&
-                x.MontoTotal > x.Abonos.Where(y => y.Estado).Sum(a => a.MontoDeAbono))
-                .Where(z => z.FechaDeCredito > fechaInicio && z.FechaDeCredito < fechaFin)
+                x => x.VehiculoId.Equals(idBus)
+                )
                 .ToList();
+            // Buscando los que tienen abonos pendientes
+            List<Creditos> creditos = new List<Creditos>();
+            foreach (var i in temp)
+            {
+                if (i.Abonos != null)
+                {
+                    if (i.MontoTotal > i.Abonos.Sum(x => x.MontoDeAbono))
+                        creditos.Add(i);
+                }
+                else
+                    creditos.Add(i);
+            }
+
             var result =
                 (
                     from item in creditos
@@ -284,12 +296,24 @@ namespace Cotracosan.Services
         [WebMethod]
         public List<CreditosSW> GetCreditosPendientesPorSocio(int id)
         {
-            var creditos = db.Creditos
-                .Include(x => x.Vehiculos)
-                .Where(c => c.Vehiculos.SocioId == id)
-                .Where(c =>
-                c.MontoTotal > c.Abonos.Where(x => x.Estado).Sum(a => a.MontoDeAbono))
+            List<Creditos> temp = db.Creditos
+                .Where(
+                x => x.Vehiculos.SocioId.Equals(id)
+                )
                 .ToList();
+            // Buscando los que tienen abonos pendientes
+            List<Creditos> creditos = new List<Creditos>();
+            foreach (var i in temp)
+            {
+                if (i.Abonos != null)
+                {
+                    if (i.MontoTotal > i.Abonos.Sum(x => x.MontoDeAbono))
+                        creditos.Add(i);
+                }
+                else
+                    creditos.Add(i);
+            }
+
             var result =
                 (
                     from item in creditos

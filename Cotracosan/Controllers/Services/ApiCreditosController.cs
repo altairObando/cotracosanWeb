@@ -57,13 +57,25 @@ namespace Cotracosan.Controllers.Services
             string fechaInicio = Request["fechaInicio"];
             string fechaFin = Request["fechaFin"];
 
-            List<Creditos> creditos = await db.Creditos
+            List<Creditos> temp = await db.Creditos
                 .Where(
-                x => x.VehiculoId.Equals(idBus) &&
-                x.MontoTotal > x.Abonos.Where(y => y.Estado).Sum( a => a.MontoDeAbono))
+                x => x.VehiculoId.Equals(idBus)
+                )
                 .ToListAsync();
+            // Buscando los que tienen abonos pendientes
+            List<Creditos> creditos = new List<Creditos>();
+            foreach (var i in temp)
+            {
+                if (i.Abonos != null)
+                {
+                    if (i.MontoTotal > i.Abonos.Sum(x => x.MontoDeAbono))
+                        creditos.Add(i);
+                }
+                else
+                    creditos.Add(i);
+            }
 
-            if(!string.IsNullOrEmpty(fechaInicio) && !string.IsNullOrEmpty(fechaFin))
+            if (!string.IsNullOrEmpty(fechaInicio) && !string.IsNullOrEmpty(fechaFin))
             {
                 DateTime fechaI = DateTime.Parse(fechaInicio);
                 DateTime fechaF = DateTime.Parse(fechaFin);
@@ -110,11 +122,23 @@ namespace Cotracosan.Controllers.Services
         // Créditos pendientes total de un socio. Todos descendentes.**
         public async Task<JsonResult> GetCreditosPendientePorSocio(int id)
         {
-            var creditos = await db.Creditos
-                .Include(x => x.Vehiculos)
-                .Where(c => c.Vehiculos.SocioId == id)
-                .Where(c => c.MontoTotal > c.Abonos.Where(x => x.Estado).Sum( a => a.MontoDeAbono ))
+            List<Creditos> temp = await db.Creditos
+                .Where(
+                x => x.Vehiculos.SocioId.Equals(id)
+                )
                 .ToListAsync();
+            // Buscando los que tienen abonos pendientes
+            List<Creditos> creditos = new List<Creditos>();
+            foreach (var i in temp)
+            {
+                if (i.Abonos != null)
+                {
+                    if (i.MontoTotal > i.Abonos.Sum(x => x.MontoDeAbono))
+                        creditos.Add(i);
+                }
+                else
+                    creditos.Add(i);
+            }
 
             var result =
                 (
