@@ -150,7 +150,7 @@ namespace Cotracosan.Controllers.Services
             string maximo = Request["max"];
 
             var creditos = await db.Creditos
-                .OrderByDescending(x => x.FechaDeCredito)
+                .OrderByDescending(x => x.Id)
                 .ToListAsync();
             try
             {

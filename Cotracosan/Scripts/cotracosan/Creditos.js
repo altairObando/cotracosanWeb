@@ -45,7 +45,7 @@ function generarDataTable() {
             {
                 'data': 'CreditoAnulado', "render": function (data) {
 
-                    return data ? '<span class="badge badge-success">Sin Eliminar</span>' : '<span class="badge badge-danger">Eliminado</span>';
+                    return !data ? '<span class="badge badge-success">Sin Eliminar</span>' : '<span class="badge badge-danger">Eliminado</span>';
                 }
             },
             {
