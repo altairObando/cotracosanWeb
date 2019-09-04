@@ -645,6 +645,7 @@
     <Content Include="Views\Carreras\TicketFactura.cshtml" />
     <Content Include="Views\Shared\_Error403.cshtml" />
     <Content Include="Views\Creditos\FacturaCredito.cshtml" />
+    <Content Include="Views\Reports\GastosDeArticulosPorVehiculos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -664,6 +665,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Reportes\Articulos.rdlc" />
     <EmbeddedResource Include="Reportes\FacturaCredito.rdlc" />
+    <EmbeddedResource Include="Reportes\Report1.rdlc" />
+    <EmbeddedResource Include="Reportes\Report2.rdlc" />
     <EmbeddedResource Include="Reportes\TicketCarrera.rdlc" />
   </ItemGroup>
   <PropertyGroup>
