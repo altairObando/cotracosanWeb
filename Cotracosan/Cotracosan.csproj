@@ -646,6 +646,7 @@
     <Content Include="Views\Shared\_Error403.cshtml" />
     <Content Include="Views\Creditos\FacturaCredito.cshtml" />
     <Content Include="Views\Reports\GastosDeArticulosPorVehiculos.cshtml" />
+    <Content Include="Views\Reports\GastosDeVehiculosPorArticulos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
