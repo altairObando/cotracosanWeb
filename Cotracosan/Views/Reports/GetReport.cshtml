@@ -1,9 +1,0 @@
-﻿@using ReportViewerForMvc;
-@{
-    Layout = null;
-}
-<div class="row">
-    <div class="col-md-10 offset-1">
-        @Html.ReportViewer(ViewBag.reporte as Microsoft.Reporting.WebForms.ReportViewer, new { @scrolling = "yes"})
-    </div>
-</div>

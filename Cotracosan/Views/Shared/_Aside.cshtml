@@ -27,6 +27,19 @@
                 </div>
             </li>
             <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#ui-reports" aria-expanded="false" aria-controls="ui-basic">
+                    <i class="mdi mdi-chart-pie"></i>
+                    <span class="menu-title">Reportes de gastos</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="ui-reports">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="@Url.Action("GastosDeArticulosPorVehiculos", "Reports")">Articulos por vehiculos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="@Url.Action("GastosDeVehiculosPorArticulos", "Reports")">Vehiculos por articulos</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="@Url.Action("Index","Carreras")">
                     <i class="mdi mdi-view-headline menu-icon"></i>
                     <span class="menu-title">Carreras</span>

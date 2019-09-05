@@ -636,8 +636,6 @@
     <Content Include="Views\Shared\_navbar.cshtml" />
     <Content Include="Views\Carreras\Resumen.cshtml" />
     <Content Include="Views\Creditos\DetalleAbonos.cshtml" />
-    <Content Include="Views\Reports\Index.cshtml" />
-    <Content Include="Views\Reports\GetReport.cshtml" />
     <Content Include="Views\Manage\AgregarImagen.cshtml" />
     <Content Include="Views\Manage\AgregarImagenWebView.cshtml" />
     <Content Include="Views\Roles\AsignarUsuarioSocio.cshtml" />
